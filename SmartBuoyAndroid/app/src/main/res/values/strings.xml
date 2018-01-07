@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">SmartBuoy</string>
+    <string name="downloadURL">http://192.168.0.25/SelectAllBuoys.php</string>
+    <string name="updateOneBuoy">http://192.168.0.25/UpdateBuoys.php</string>
+    <string name="mqttBroker">tcp://192.168.0.25:1883</string>
+    <string name="mqttClientID">androidApp</string>
+    <string name="subscriptionTopic">test</string>
+
+    <string name="offLight">Κλειστό φως!</string>
+    <string name="onLight">Ανοιχτό φως!</string>
+    <string name="unableToDownload">Δεν μπορέσαμε να κατεβάσουμε τις πληροφοριές για τις σημαδούρες!</string>
+    <string name="enablePermissions">Ενεργοποιείστε τις κατάλληλες άδειες!!</string>
+    <string name="enableLocationPermission">Η εφαρμογή χρειάζεται να έχει πρόσβαση στις πληροφορίες τοποθεσίας παρακαλώ ξανά τρέξτε την εφαρμογή!</string>
+    <string name="unableToUpdate">Δεν μπορέσαμε να ανανεώσουμε τις πληροφορίες για τις σημαδούρες!!</string>
+    <string name="serverError">Υπήρξε κάποιο πρόβλημα με τον Server μας!</string>
+    <string name="updateSuccessful">Η ανανέωση έγινε επιτυχώς!</string>
+    <string name="throttle">Throttle</string>
+    <string name="steering">Steering</string>
+
+    <string name="hello_blank_fragment">heyyyyyyyyyy</string>
+</resources>
