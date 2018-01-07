@@ -1,0 +1,106 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.bougioklis.smartbuoy.Fragments.LEDFragment">
+
+    <Switch
+        android:id="@+id/led1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="LED1"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/led2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/led1"
+        android:text="LED2"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingTop="25sp"/>
+
+
+    <Switch
+        android:id="@+id/led3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/led2"
+        android:text="LED3"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingTop="25sp"/>
+
+    <Button
+        android:id="@+id/rgb1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/led3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25sp"
+        android:text="RGB 1"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <Switch
+        android:id="@+id/rgb1Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/rgb1"
+        android:layout_below="@+id/led3"
+        android:layout_marginTop="28sp" />
+
+    <Button
+        android:id="@+id/rgb2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rgb1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25sp"
+        android:text="RGB 2"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <Switch
+        android:id="@+id/rgb2Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/rgb2"
+        android:layout_below="@+id/rgb1"
+        android:layout_marginTop="28sp"
+        />
+
+    <Button
+        android:id="@+id/rgb3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rgb2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25sp"
+        android:text="RGB 3"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <Switch
+        android:id="@+id/rgb3Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/rgb3"
+        android:layout_below="@+id/rgb2"
+        android:layout_marginTop="28sp"
+        />
+
+
+</RelativeLayout>
+
