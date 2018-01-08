@@ -199,7 +199,8 @@ public class RTSPActivity extends AppCompatActivity {
                     showRtspStream();
                 } else {
                     //den deixnoume rtsp stream
-
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
                 }
             }
         });
