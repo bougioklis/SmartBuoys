@@ -3,6 +3,7 @@ package com.example.bougioklis.smartbuoy;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -16,22 +17,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.bougioklis.smartbuoy.Classes.BuoyClass;
 import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
+import com.example.bougioklis.smartbuoy.MenuOptions.SettingsAtivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +31,9 @@ public class SplashActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private GPS gps;
     private Global global;
+    String server_ip = null;
+
+    public static String sharedPreferenceID = "IP_Camera";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +54,38 @@ public class SplashActivity extends AppCompatActivity {
         global = ((Global) getApplicationContext());
         global.buoyList = new ArrayList<>();
 
+        SharedPreferences prefs = getSharedPreferences(sharedPreferenceID, MODE_PRIVATE);
+        server_ip = prefs.getString("IP", null);
+
+        Log.i("serverIP IF",(server_ip==null) +"");
+
+        if (server_ip!= null) {
+
+            //arxikopoihsh twn url
+            global.selectAllURL = "http://" + server_ip + "/WebServer/SelectAllBuoys.php";
+            global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
+            global.MQTTURL = "tcp://" + server_ip + ":1883";
+
+
+        } else {
+            Log.i("MPIKE","MPIKE");
+            Intent intent = new Intent(SplashActivity.this,SettingsAtivity.class);
+            intent.putExtra("id","SplashActivity");
+            startActivity(intent);
+        }
         //h pernw coors
         gps = new GPS(getApplicationContext());
         if (!gps.isGPSEnabled) {
             buildAlertMessageNoGPS();
         }
 
+        if(server_ip!=null){
+            downloadFromServer();
+        }
+
+    }
+
+    void downloadFromServer(){
         //dhmiourgoume background thread
         new Thread(new Runnable() {
             @Override
@@ -84,7 +102,7 @@ public class SplashActivity extends AppCompatActivity {
                             // afou ektelestei to download pigainoume edw
                             if (global.flagIOException) {
                                 Toast.makeText(getApplicationContext(), R.string.unableToDownload, Toast.LENGTH_LONG).show();
-                                global.flagIOException= false;
+                                global.flagIOException = false;
                             }
                             continueApplication();
                         }

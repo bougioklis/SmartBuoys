@@ -1,5 +1,6 @@
 package com.example.bougioklis.smartbuoy;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -8,12 +9,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.Fragments.FragmentDialog;
+import com.example.bougioklis.smartbuoy.MenuOptions.AboutUsActivity;
+import com.example.bougioklis.smartbuoy.MenuOptions.SettingsAtivity;
+import com.example.bougioklis.smartbuoy.MenuOptions.TutorialActivity;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -150,6 +157,30 @@ public class MapsActivity extends AppCompatActivity {
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsAtivity.class));
+                return true;
+            case R.id.tutorial:
+                startActivity(new Intent(this, TutorialActivity.class));
+                return true;
+            case R.id.about:
+                startActivity(new Intent(this, AboutUsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
     public void onResume(){
         super.onResume();
         //this will refresh the osmdroid configuration on resuming.

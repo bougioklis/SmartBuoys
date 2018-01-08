@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -26,12 +27,15 @@ import java.io.UnsupportedEncodingException;
 public class MqttHelper {
 
     public MqttAndroidClient mqttAndroidClient;
-
+    Global global;
     //mqtt client kai server
     String server,client;
 
     public MqttHelper(Context context){
-        server = context.getString(R.string.mqttBroker);
+
+        global = ((Global) context);
+
+        server = global.MQTTURL;
         client = context.getString(R.string.mqttClientID);
 
         mqttAndroidClient = new MqttAndroidClient( context,server,client);

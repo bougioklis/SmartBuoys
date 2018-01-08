@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">SmartBuoy</string>
-    <string name="downloadURL">http://192.168.1.1/WebServer/SelectAllBuoys.php</string>
-    <string name="updateOneBuoy">http://192.168.1.1/WebServer/UpdateBuoys.php</string>
-    <string name="mqttBroker">tcp://192.168.1.1:1883</string>
+    <!--<string name="downloadURL">http://192.168.1.1/WebServer/SelectAllBuoys.php</string>-->
+    <!--<string name="updateOneBuoy">http://192.168.1.1/WebServer/UpdateBuoys.php</string>-->
+    <!--<string name="mqttBroker">tcp://192.168.1.1:1883</string>-->
+    <string name="rtspUrl">rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov</string>
+
     <string name="mqttClientID">androidApp</string>
     <string name="subscriptionTopic">test</string>
 
@@ -16,6 +18,11 @@
     <string name="updateSuccessful">Η ανανέωση έγινε επιτυχώς!</string>
     <string name="throttle">Throttle</string>
     <string name="steering">Steering</string>
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="tutorial">Tutorial</string>
+
+    <string name="ipfill">Παρακαλώ συμπληρώστε την IP διεύθυνση του Web Server:</string>
+    <string name="rtspip">Παρακαλώ συμπληρώστε την IP διεύθυνση της Camera:</string>
 
     <string name="hello_blank_fragment">heyyyyyyyyyy</string>
 </resources>
