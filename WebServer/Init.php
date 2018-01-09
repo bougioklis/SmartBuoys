@@ -1,8 +1,8 @@
+<?php
 /*
 * Created By Bougioklis George
 */
 
-<?php
 //Connection to Database
 $servername = "localhost";
 $username = "bougioklis";

@@ -1,14 +1,12 @@
+<?php
 /*
 *Created By Bougioklis George
-*/
-<?php
-
-/*
+*
 * Buoy Update
 */
 
 require 'Init.php';
-include_once 'testPublish.php';
+include_once 'publishMqtt.php';
 
 //get buoy's vars
 

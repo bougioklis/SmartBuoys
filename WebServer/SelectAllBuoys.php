@@ -1,8 +1,7 @@
+<?php
 /*
 *Created By Bougioklis George
 */
-<?php
-
 // require database connection file
 require 'Init.php';
 

@@ -1,10 +1,13 @@
-/*
-*Created by Bougioklis George
-*/
-<?php// Maybe we dont use this file anymore
+<?php
+
+//Created by Bougioklis George
+
+// Maybe we dont use this file anymore
 
 //require database connection file
 require 'Init.php';
+
+//echo  $_SERVER['SERVER_ADDR'];
 
 // specific buoy id 
 $id=$_POST['id'];

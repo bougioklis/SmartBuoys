@@ -1,7 +1,7 @@
+<?php
 /*
 *Created by Bougioklis George
 */
-<?php
 // Creation file for our database
 $serverName = "localhost";
 $username = "bougioklis";

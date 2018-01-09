@@ -1,9 +1,7 @@
+<?php
 /*
 *Created By Bougioklis George
-*/
-<?php
-
-/*
+*
 *Subscibe to Topic BuoyConnected  when an arduino is powered on it will  publish on the specific topic and this script will
 * call the publish function to publish arduino's data.
 */
@@ -15,11 +13,11 @@ include_once "phpMQTT.php" ;
 require 'Init.php';
 
 //include mqtt publish file
-require 'testPublish.php';
+require 'publishMqtt.php';
 
 //Our Server's ip
-//$server = $_SERVER['SERVER_ADDR'];
 
+//$server = $_SERVER["SERVER_ADDR"];
 $server = "192.168.1.1";     // change if necessary
 $port = 1883;                     // change if necessary
 $username = "";                   // set your username
