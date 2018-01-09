@@ -144,7 +144,7 @@ void loop() {
     // the arduino will be rebooted
     Serial.println("Client Cannot Connect");
   }
-
+Serial.println (IsfirstLoop);
   if(IsfirstLoop){
     mqttPublish();
     IsfirstLoop= false;

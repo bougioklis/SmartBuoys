@@ -1,5 +1,6 @@
 void mqttPublish(){
-      client.publish("BuoyConnected",Buoy.id);  
+  
+      Serial.println ( client.publish("BuoyConnected",Buoy.id));  
 }
 
 
