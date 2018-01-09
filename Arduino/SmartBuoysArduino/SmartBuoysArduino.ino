@@ -40,7 +40,7 @@ EthernetClient Etheclient;
 Servo servoMotor; 
 
 //MQTT server and port
-const char* mqttServer = "192.168.1.5";
+const char* mqttServer = "192.168.1.1";
 const int mqttPort = 1883;
 
 //MQTT client
@@ -53,7 +53,7 @@ String clientMQTT="Buoy2";// Client id for MQTT protocol
 
 //struck to keep Buoy's informations
 struct BuoyStruck{
-  String id="id=2";
+  const char *id="id=2";
   float latitude,longitude,TargetLat,TargetLng;
   int orientation;
   int LED1,LED2,LED3;
@@ -69,7 +69,7 @@ struct BuoyStruck{
 //Struck's instance
 struct BuoyStruck Buoy;
 
-
+boolean IsfirstLoop =true;
 
 void setup() {
   // put your setup code here, to run once:
@@ -143,6 +143,11 @@ void loop() {
     // if client cannot connect to mqtt for 8 seconds
     // the arduino will be rebooted
     Serial.println("Client Cannot Connect");
+  }
+
+  if(IsfirstLoop){
+    mqttPublish();
+    IsfirstLoop= false;
   }
 
   manageLEDS();

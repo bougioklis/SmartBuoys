@@ -1,3 +1,7 @@
+void mqttPublish(){
+      client.publish("BuoyConnected",Buoy.id);  
+}
+
 
 //Callback function of MQTT Subscription
 void callback(char* topic, byte* payload, unsigned int length) {
