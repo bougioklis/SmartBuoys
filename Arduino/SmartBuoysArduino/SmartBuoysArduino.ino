@@ -6,7 +6,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
-#include <math.h>
+#include <string.h>
 
 
 /*Initializa & Assign a unique ID to this compass sensor at the same time */
@@ -70,6 +70,10 @@ struct BuoyStruck{
 struct BuoyStruck Buoy;
 
 boolean IsfirstLoop =true;
+
+unsigned long previousMillis = 0; // last time latitude,longtitude and orientation was send to server
+long interval = 10000; // send LatLng and orientation to server every 10seconds
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -144,7 +148,17 @@ void loop() {
     // the arduino will be rebooted
     Serial.println("Client Cannot Connect");
   }
-Serial.println (IsfirstLoop);
+
+  //current timestamp
+  unsigned long currentMillis = millis();
+
+  if(currentMillis - previousMillis > interval) {
+    Serial.println("Update IF");
+     previousMillis = currentMillis;  
+    updateServerLatLngOrientation();
+     // do something
+  }
+  
   if(IsfirstLoop){
     mqttPublish();
     IsfirstLoop= false;

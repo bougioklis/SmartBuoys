@@ -27,6 +27,8 @@ void getHeading(){
   float headingDegrees = heading * 180/M_PI; 
   
   Serial.print("Heading (degrees): "); Serial.println(headingDegrees);
+
+  Buoy.orientation= headingDegrees;
   
   delay(500);
 }

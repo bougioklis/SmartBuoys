@@ -1,6 +1,39 @@
 void mqttPublish(){
+  client.publish("BuoyConnected",Buoy.id);  
+}
+
+void updateServerLatLngOrientation(){
+
+  String dataString = "Orientation:";
+  dataString.concat(Buoy.orientation);
+  dataString+="**Lat:";
+  dataString.concat(Buoy.latitude);
+  dataString+="**Lng:";
+  dataString.concat(Buoy.longitude);
+  dataString+="**ID:";
+  dataString.concat(Buoy.id);
   
-      Serial.println ( client.publish("BuoyConnected",Buoy.id));  
+  Serial.println(dataString);
+  
+  char charData[55];
+  dataString.toCharArray(charData,55);
+  
+  client.publish("Buoy2Update",charData);
+  
+//  char data[4];
+//  dtostrf(Buoy.orientation,6,2,data);
+//  client.publish("Buoy2Update",data);
+//  
+//  char data1[10];
+//  dtostrf(Buoy.latitude,6,2,data1);
+//  client.publish("Buoy2Update",data1);
+//
+//  char data2[10];
+//  dtostrf(Buoy.longitude,6,2,data2);
+//  client.publish("Buoy2Update",data2);
+  
+//  client.publish("Buoy2Update",Buoy.latitude+"");
+//  client.publish("Buoy2Update",Buoy.longitude+"");
 }
 
 
