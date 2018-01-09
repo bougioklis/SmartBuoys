@@ -1,21 +1,16 @@
+/*
+*Created By Bougioklis George
+*/
 <?php
+
+/*
+* Buoy Update
+*/
 
 require 'Init.php';
 include_once 'testPublish.php';
-/*
-$id =1;
 
-$led1 = 1;
-$led2 = 0;
-$led3 = 0;
-
-$hover = 0;
-$camera = 1;
-
-$RGB1 = "off";
-$RGB2 = "#ccff66";
-$RGB3 = "#111a00";
-*/
+//get buoy's vars
 
 $id = $_POST['id'];
 
@@ -42,7 +37,7 @@ if($stmt = $conn -> prepare($sql) ){
 	}
 }
 
-//kaloume tohn sunarthsh MQTTPUBLISH me topic to Buoy+id  tis shmadouras kai to id tis shmadouras
+//calling mqtt publish function to  alert buoy about the  changes
 MQTTPublish("Buoy".$id,$id);
 
 ?>

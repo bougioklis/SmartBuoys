@@ -1,5 +1,9 @@
+/*
+* Created By Bougioklis George
+*/
+
 <?php
-//arxeio gia thn sundesh me thn vash dedomenwn
+//Connection to Database
 $servername = "localhost";
 $username = "bougioklis";
 $password = "raspberry";

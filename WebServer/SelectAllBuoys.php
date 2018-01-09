@@ -1,15 +1,19 @@
+/*
+*Created By Bougioklis George
+*/
 <?php
 
+// require database connection file
 require 'Init.php';
 
-//epilegoume oles tis shmadoures
+//Select  all Buoys
 $sql = "SELECT * FROM Buoy";
 $result = $conn -> query($sql);
 
 if($result){
 	$buoy = array();
 	$finalResult = array();
-		
+	//while we have buoys  fetch results
 	while ($row = $result -> fetch_assoc() ){
 		$id   = $row[ID];
 		$lat  = $row[latitude];
@@ -17,7 +21,7 @@ if($result){
 		$orientation = $row[orientation];
 		$LED1  = $row[LED1];
 		$LED2  = $row[LED2];
-		$LED3  = $row[LED3]; 
+		$LED3  = $row[LED3];
 		$RGB1  = $row[RGB1];
 		$RGB2  = $row[RGB2];
 		$RGB3  = $row[RGB3];
@@ -26,7 +30,7 @@ if($result){
 		$hover = $row[hoverFlag];
 		$camera = $row[cameraFlag];
 
-//pernoume ta dedomena kai ta kanoume push ston pinaka buoy
+		// push results on an array
 		array_push($buoy, $id);
 		array_push($buoy, $lat);
 		array_push($buoy, $lng);
@@ -42,17 +46,18 @@ if($result){
 		array_push($buoy, $hover);
 		array_push($buoy, $camera);
 
+		//push array for json encoding
 		array_push($finalResult, $buoy);
 
 		unset($buoy);
 		$buoy= array();
 
 	}
-		
-	//kanoume json encoding to pinala finaResult
+
+	//JSON encoding all buoys
 	$json['buoy'] = $finalResult;
 	echo json_encode($json);
-		
+
 
 }else{
 

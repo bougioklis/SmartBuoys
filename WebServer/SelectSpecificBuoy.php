@@ -1,9 +1,15 @@
-<?php
+/*
+*Created by Bougioklis George
+*/
+<?php// Maybe we dont use this file anymore
 
+//require database connection file
 require 'Init.php';
 
+// specific buoy id 
 $id=$_POST['id'];
 
+//select everything from a buoy
 $sql = "SELECT * FROM Buoy WHERE ID=?";
 
 if($stmt = $conn -> prepare($sql)){
@@ -16,7 +22,7 @@ if($stmt = $conn -> prepare($sql)){
 
 		$buoy = array();
 		$finalResult = array();
-
+		// fetch result
 		$row = $store -> fetch_assoc();
 
 			$id   = $row[ID];

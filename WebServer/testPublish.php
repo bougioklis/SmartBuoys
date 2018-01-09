@@ -1,14 +1,20 @@
+/*
+*Created By Bougioklis George
+*/
 <?php 
-
+/*
+* Function which  publish mqtt on specific topic abou a buoy
+*/
 function MQTTPublish($topic,$id){
 
-require ("phpMQTT.php");
+require_once "phpMQTT.php";
 require 'Init.php';
 
 //$id = $_POST['id'];
 
 
-$server= "192.168.0.25";
+$server= "192.168.1.1";
+//$server =  $_SERVER['SERVER_ADDR'];
 $port =1883;
 $username = "";
 $password = "";
@@ -16,7 +22,7 @@ $client_id= "Buoy";
 
 $mqtt =new phpMQTT($server,$port,$client_id);
 
-
+//select all infos abou a specific buoy
 $sql = "SELECT * FROM Buoy WHERE ID =?";
 
 if($stmt = $conn ->prepare($sql)){
@@ -28,7 +34,7 @@ $stmt -> bind_param("i",$id);
 
 		$buoy = array();
 		$finalResult = array();
-//pernoume tis plhrofories tis shmadouras
+		//fetch result
 		$row = $store -> fetch_assoc();
 
 			$id   = $row[ID];
@@ -53,6 +59,7 @@ $stmt -> bind_param("i",$id);
 
 }
 
+//publish those results on mqtt topic
 if($mqtt -> connect(true,NULL,$username,$password)){
 
 
