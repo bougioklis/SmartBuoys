@@ -87,15 +87,15 @@ void setup() {
   //initialize Compass sensor
   if(!mag.begin()){
     /* There was a problem detecting the HMC5883 ... check your connections */
-    Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
+//    Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
     while(1);
   }
 
    // start the Ethernet connection using a fixed IP address and DNS server:
   Ethernet.begin(mac, ip, myDns);
   // print the Ethernet board/shield's IP address:
-  Serial.print("My IP address: ");
-  Serial.println(Ethernet.localIP());
+//  Serial.print("My IP address: ");
+//  Serial.println(Ethernet.localIP());
 
   //Start mqtt protocol with the given server and port form GlobalVars
   client.setServer(mqttServer, mqttPort);
@@ -104,11 +104,11 @@ void setup() {
 
   // run while client is not Connected to MQTT SERVER
   while (!client.connected()) {
-    Serial.println("Connecting to MQTT...");
+//    Serial.println("Connecting to MQTT...");
     // MQTT Client connection
     if (client.connect("ArduinoClient")) {
  
-      Serial.println("connected");  
+//      Serial.println("connected");  
  
     } else {
       //error code and retrying to connect
@@ -119,8 +119,6 @@ void setup() {
   }
 
   //Client subscribe to necessary topics
-  Serial.print("subscrbe to driving   ");Serial.println(client.subscribe("Buoy2Drive"));
-  delay(1000);
   client.subscribe("Buoy2Drive");
   delay(1000);
   client.subscribe(Buoy.generalTopic);
@@ -158,8 +156,7 @@ void loop() {
   unsigned long currentMillis = millis();
 
   if(currentMillis - previousMillis > interval) {
-    Serial.println("Update IF");
-     previousMillis = currentMillis;  
+    previousMillis = currentMillis;  
     updateServerLatLngOrientation();
      // do something
   }
