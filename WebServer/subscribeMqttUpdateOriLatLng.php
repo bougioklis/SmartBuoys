@@ -52,9 +52,9 @@ $mqtt->close();
 
 function procmsg($topic, $msg){
 
-	$conn= new mysqli ("localhost","bougioklis","raspberry","smart_buoy");
-	if($conn -> connect_error){
-		die("Connections failed: ". $conn -> connect_error);
+	$conn= mysqli_connect ("localhost","bougioklis","raspberry","smart_buoy");
+	if(mysqli_connect_errno()){
+		die("Connections failed: ". $mysqli_connect_error());
 	}
 
 
@@ -67,31 +67,24 @@ function procmsg($topic, $msg){
 	//has a string like orientation:(int)
 	$orientationParts = explode(":",$msgParts[0]);
 	$orientation=$orientationParts[1];// has the actual orientation
-	echo $orientation;
 
 	//has a string like Lat:(float)
 	$LatParts =explode(":",$msgParts[1]);
 	$Lat = $LatParts[1];//has the actual latitude
-	echo $Lat;
 
 	//has a string like Lng:(float)
 	$LngParts = explode(":",$msgParts[2]);
 	$Lng = $LngParts[1];// has the actual longitude
-	echo $Lng;
 
 	//has a string like ID:(int)
-	$idParts =explode(":",$msgParts[3]);
+	$idParts =explode("=",$msgParts[3]);
 	$id = $idParts[1];//has the actual id
 
-	$sql = "UPDATE Buoy SET orientation=?,latitude=?,longitude=? WHERE ID =?" ;
-	if($stmt = $conn -> prepare($sql)){
-		$stmt ->bind_param("iddi",$orientation,$Lat,$Lng,$id);
-		$stmt -> execute();
-		echo "<br>". $stmt -> error;
-		if ($stmt -> errno){
-			echo "success";
-		}else{
-			echo "failure";
-		}
+	$sql = "UPDATE Buoy SET orientation=".$orientation.",latitude=".$Lat.",longitude=".$Lng." WHERE ID =".$id ;
+
+	if(mysqli_query($conn,$sql)){
+		echo "success";
+	}else{
+		echo "Error On Updating: ".mysqli_sqlstate($conn);
 	}
 }

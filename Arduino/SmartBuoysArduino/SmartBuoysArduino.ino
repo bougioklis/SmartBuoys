@@ -6,8 +6,6 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
-#include <string.h>
-
 
 /*Initializa & Assign a unique ID to this compass sensor at the same time */
 Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
@@ -121,7 +119,10 @@ void setup() {
   }
 
   //Client subscribe to necessary topics
-  client.subscribe(Buoy.drivingTopic);
+  Serial.print("subscrbe to driving   ");Serial.println(client.subscribe("Buoy2Drive"));
+  delay(1000);
+  client.subscribe("Buoy2Drive");
+  delay(1000);
   client.subscribe(Buoy.generalTopic);
 
   // pins mode
@@ -133,6 +134,10 @@ void setup() {
   pinMode( MOTOR_B_PWM, OUTPUT );
   digitalWrite( MOTOR_B_DIR, LOW );
   digitalWrite( MOTOR_B_PWM, LOW );
+
+  servoMotor.attach(servoPin);
+  servoMotor.write(90);
+
 }
 
 void loop() {
@@ -163,6 +168,9 @@ void loop() {
     mqttPublish();
     IsfirstLoop= false;
   }
+  Serial.print("Throttle:"); Serial.println(Buoy.throttle);
+  Serial.print("Sterring:"); Serial.println(Buoy.steering);
+  
 
   manageLEDS();
   driveBuoy();
