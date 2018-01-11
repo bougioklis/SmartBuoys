@@ -68,6 +68,7 @@ struct BuoyStruck{
 struct BuoyStruck Buoy;
 
 boolean IsfirstLoop =true;
+boolean finishedParsing=false;
 
 unsigned long previousMillis = 0; // last time latitude,longtitude and orientation was send to server
 long interval = 10000; // send LatLng and orientation to server every 10seconds
@@ -165,12 +166,18 @@ void loop() {
     mqttPublish();
     IsfirstLoop= false;
   }
-  Serial.print("Throttle:"); Serial.println(Buoy.throttle);
-  Serial.print("Sterring:"); Serial.println(Buoy.steering);
+
   
 
   manageLEDS();
-  driveBuoy();
   getHeading();
-  
+
+  if(Buoy.steering !=0 || Buoy.throttle!=0){
+      driveBuoy();
+  }
+//Serial.println((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <0.010));
+  if((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) >0.010) ){
+  Serial.println("MPIKE??");
+    AutoDriveBuoy();    
+  }
 }

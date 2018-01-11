@@ -46,7 +46,10 @@ if(strcmp(topic,"Buoy2")==0){
    response ="";
 //  payload=null;
   counterMQTT++;
-  if(counterMQTT ==14) counterMQTT=0;
+  if(counterMQTT ==14) {
+    counterMQTT=0;
+    finishedParsing=true;
+  }
   }
 }
 
@@ -66,11 +69,11 @@ void parseMqttDataDrive(String response){
   }else if(counter==1){// to latitude pou exei o server
     
     Buoy.latitude=response.substring(response.lastIndexOf(':')+1,response.length()).toFloat();
-    
+    Serial.println(Buoy.latitude, 6);
   }else if(counter==2){//to longitude pou exei o server
     
     Buoy.longitude=response.substring(response.lastIndexOf(':')+1,response.length()).toFloat();
-    
+    Serial.println(Buoy.longitude, 6);
   }else if(counter==3){// to orientation pou exei o server
     
     Buoy.orientation=response.substring(response.lastIndexOf(':')+1,response.length()).toInt();
@@ -102,11 +105,11 @@ void parseMqttDataDrive(String response){
   }else if(counter==10){// to target Lat gia to pou na paei h shmadoura
     
     Buoy.TargetLat=response.substring(response.lastIndexOf(':')+1,response.length()).toFloat();
-    
+    Serial.println(Buoy.TargetLat, 6);
   }else if(counter==11){// to target Lng gia to pou na paei h shmadoura
     
     Buoy.TargetLng=response.substring(response.lastIndexOf(':')+1,response.length()).toFloat();
-    
+    Serial.println(Buoy.TargetLng, 6);
   }else if(counter==12){// to hover flag mas..... 1 gia na kanei hover 0 gia na mjn kanei
     
     Buoy.hover=response.substring(response.lastIndexOf(':')+1,response.length()).toInt();
