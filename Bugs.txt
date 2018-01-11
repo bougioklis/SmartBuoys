@@ -1,6 +1,6 @@
 Arduino:
 *Manual driving (10/1/18) was not receiving messages from broker check 
-  another internet
+  another internet connection
 
 
 
@@ -9,3 +9,4 @@ Webserver:
 
 
 Android:
+* Maps Activity does not refreshing...
