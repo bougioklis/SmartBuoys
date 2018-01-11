@@ -36,6 +36,12 @@
         <activity android:name=".MenuOptions.SettingsAtivity" />
         <activity android:name=".MenuOptions.AboutUsActivity" />
         <activity android:name=".MenuOptions.TutorialActivity"></activity>
+
+        <service
+            android:name=".Service.DownloadService"
+            android:enabled="true"
+            android:stopWithTask="true"/>
+
     </application>
 
 </manifest>

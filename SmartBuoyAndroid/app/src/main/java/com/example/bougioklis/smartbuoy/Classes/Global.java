@@ -51,6 +51,7 @@ public class Global extends Application {
     //an ginei kapoio IOException
     public boolean flagIOException = false;
 
+
     //sunarthsh gia update twn shmadourwn
     public String updateBuoys(BuoyClass buoy) {
 
@@ -178,6 +179,7 @@ public class Global extends Application {
                         stringToBoolean(led1), stringToBoolean(led2), stringToBoolean(led3),
                         stringToBoolean(hover), stringToBoolean(camera), rgb1, rgb2, rgb3, getApplicationContext()));
             }
+
             // lista me tis simadoures
             return listWithBuoys;
 
@@ -218,4 +220,7 @@ public class Global extends Application {
         }
         return true;
     }
+
+
+
 }
