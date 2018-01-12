@@ -172,6 +172,10 @@ public class MapsActivity extends AppCompatActivity {
 
                                         @Override
                                         public boolean onItemLongPress(final int index, final OverlayItem item) {
+
+                                            global.markerClickIndex = index;
+                                            startActivity(new Intent(MapsActivity.this,NavigationMapsActivity.class));
+
                                             return false;
                                         }
                                     });

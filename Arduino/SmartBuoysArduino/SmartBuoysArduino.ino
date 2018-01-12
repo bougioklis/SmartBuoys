@@ -108,7 +108,7 @@ void setup() {
     // MQTT Client connection
     if (client.connect(clientMQTT) && client.connect(clientMqttDrive)) {
  
-      Serial.println("Connected successfully");
+//      Serial.println("Connected successfully");
     } else {
       //error code and retrying to connect
       Serial.print("failed with state ");
@@ -141,7 +141,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   if(client.loop()){
-    Serial.println("Client Connected Success");
+//    Serial.println("Client Connected Success");
     
     //if client is connected to mqtt reset the watchdog Timer
     wdt_reset();
@@ -172,7 +172,11 @@ void loop() {
   }
 //Serial.println((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <0.010));
   if((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) >0.010) ){
-  Serial.println("MPIKE??");
+//  Serial.println("MPIKE??");
     AutoDriveBuoy();    
+  }
+
+  if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <0.010){
+    stopMoving();
   }
 }

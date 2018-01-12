@@ -2,10 +2,13 @@ void AutoDriveBuoy(){
   
   if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) < 0.010){
     stopMoving();
+    servoMotor.write(90);
+
   }
   else{
     get_direction(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng);
     forward();
+
  } 
 }
 
