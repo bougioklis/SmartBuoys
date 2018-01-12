@@ -75,7 +75,8 @@ public class DownloadService extends Service {
                     @Override
                     public void run() {
                         try {
-                            global.downloadBuoys();
+                            global.buoyList.clear();
+                            global.buoyList=global.downloadBuoysFromService();
                         } catch (Exception e) {
                             Log.i("Thread ex", e.toString());
                         } finally {

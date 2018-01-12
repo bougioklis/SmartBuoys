@@ -44,7 +44,7 @@ if(strcmp(topic,"Buoy2")==0){
 
    parseMqttData(response,counterMQTT);
    response ="";
-//  payload=null;
+
   counterMQTT++;
   if(counterMQTT ==14) {
     counterMQTT=0;
@@ -69,11 +69,9 @@ void parseMqttDataDrive(String response){
   }else if(counter==1){// to latitude pou exei o server
     
     Buoy.latitude=response.substring(response.lastIndexOf(':')+1,response.length()).toFloat();
-    Serial.println(Buoy.latitude, 6);
   }else if(counter==2){//to longitude pou exei o server
     
     Buoy.longitude=response.substring(response.lastIndexOf(':')+1,response.length()).toFloat();
-    Serial.println(Buoy.longitude, 6);
   }else if(counter==3){// to orientation pou exei o server
     
     Buoy.orientation=response.substring(response.lastIndexOf(':')+1,response.length()).toInt();

@@ -9,4 +9,3 @@ Webserver:
 
 
 Android:
-* Maps Activity does not refreshing...

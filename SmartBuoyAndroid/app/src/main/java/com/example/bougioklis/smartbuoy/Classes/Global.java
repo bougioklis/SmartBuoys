@@ -51,6 +51,10 @@ public class Global extends Application {
     //an ginei kapoio IOException
     public boolean flagIOException = false;
 
+    //flag to keep if list has changed
+    public boolean hasBuoyBeenUpdated = false;
+
+
 
     //sunarthsh gia update twn shmadourwn
     public String updateBuoys(BuoyClass buoy) {
@@ -219,6 +223,74 @@ public class Global extends Application {
             return false;
         }
         return true;
+    }
+
+
+    // sunartisi gia download twn shmadourwn
+    public List<BuoyClass> downloadBuoysFromService() {
+        List<BuoyClass> listWithBuoys = new ArrayList<>();
+
+        String urL = selectAllURL;
+
+        try {
+            //ekteloume http request
+            URL url = new URL(urL);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoInput(true);
+
+            InputStream inputstream = httpURLConnection.getInputStream();
+
+            //metatropi se string builder to response
+            StringBuilder result = inputToString(inputstream);
+            Log.i("response", result.toString());
+
+            // to response einai se json morfi
+            JSONObject jsonResponse = new JSONObject(result.toString());
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("buoy");
+
+            // boh8itikes metablites
+            String id, latitude, longitude, orientation, led1, led2, led3, rgb1, rgb2, rgb3, targetLat, targetLng, hover, camera;
+//json parsing
+            for (int i = 0; i < jsonMainNode.length(); i++) {
+                JSONArray jsonArray = jsonMainNode.getJSONArray(i);
+                id = jsonArray.getString(0);
+                latitude = jsonArray.getString(1);
+                longitude = jsonArray.getString(2);
+                orientation = jsonArray.getString(3);
+                led1 = jsonArray.getString(4);
+                led2 = jsonArray.getString(5);
+                led3 = jsonArray.getString(6);
+                rgb1 = jsonArray.getString(7);
+                rgb2 = jsonArray.getString(8);
+                rgb3 = jsonArray.getString(9);
+                targetLat = jsonArray.getString(10);
+                targetLng = jsonArray.getString(11);
+                hover = jsonArray.getString(12);
+                camera = jsonArray.getString(13);
+
+                // populate thn lista me tis simadoures
+                listWithBuoys.add(new BuoyClass(Integer.parseInt(id), Integer.parseInt(orientation), Double.parseDouble(latitude),
+                        Double.parseDouble(longitude), Double.parseDouble(targetLat), Double.parseDouble(targetLng),
+                        stringToBoolean(led1), stringToBoolean(led2), stringToBoolean(led3),
+                        stringToBoolean(hover), stringToBoolean(camera), rgb1, rgb2, rgb3, getApplicationContext()));
+            }
+
+            hasBuoyBeenUpdated=true;
+            // lista me tis simadoures
+            return listWithBuoys;
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            flagIOException = true;
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

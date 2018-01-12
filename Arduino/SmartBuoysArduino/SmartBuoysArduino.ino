@@ -47,7 +47,7 @@ PubSubClient client(Etheclient);
 int led=2,led1=3,led2=4; // led pins
 int servoPin=9;// motorServo pin
 int counterMQTT=0;//counter for Mqtt (Which Mqtt was send)
-String clientMQTT="Buoy2";// Client id for MQTT protocol
+const char *clientMQTT="Buoy2",*clientMqttDrive = "Buoy2Driver";// Client id for MQTT protocol
 
 //struck to keep Buoy's informations
 struct BuoyStruck{
@@ -105,12 +105,10 @@ void setup() {
 
   // run while client is not Connected to MQTT SERVER
   while (!client.connected()) {
-//    Serial.println("Connecting to MQTT...");
     // MQTT Client connection
-    if (client.connect("ArduinoClient")) {
+    if (client.connect(clientMQTT) && client.connect(clientMqttDrive)) {
  
-//      Serial.println("connected");  
- 
+      Serial.println("Connected successfully");
     } else {
       //error code and retrying to connect
       Serial.print("failed with state ");
@@ -120,7 +118,7 @@ void setup() {
   }
 
   //Client subscribe to necessary topics
-  client.subscribe("Buoy2Drive");
+  client.subscribe(Buoy.drivingTopic);
   delay(1000);
   client.subscribe(Buoy.generalTopic);
 
@@ -159,16 +157,13 @@ void loop() {
   if(currentMillis - previousMillis > interval) {
     previousMillis = currentMillis;  
     updateServerLatLngOrientation();
-     // do something
   }
   
   if(IsfirstLoop){
     mqttPublish();
     IsfirstLoop= false;
   }
-
-  
-
+  Serial.print("servo is on: "); Serial.println(servoMotor.read());
   manageLEDS();
   getHeading();
 

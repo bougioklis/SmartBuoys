@@ -2,7 +2,6 @@ void AutoDriveBuoy(){
   
   if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) < 0.010){
     stopMoving();
-    
   }
   else{
     get_direction(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng);
@@ -101,6 +100,7 @@ void forward(){
    // set the motor speed and direction
    digitalWrite( MOTOR_B_DIR, HIGH ); // direction = forward
    analogWrite( MOTOR_B_PWM, 50); 
+   delay(1000);
 }
 
 void turnRight(){

@@ -52,7 +52,6 @@ public class MapsActivity extends AppCompatActivity {
 
     MapView map;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,47 +112,7 @@ public class MapsActivity extends AppCompatActivity {
                     public boolean onItemLongPress(final int index, final OverlayItem item) {
                         if (index != items.size() - 1) {
                             items.get(index).setMarker(global.buoyList.get(index).getSelectedMarker());
-                            //----------------------------------------------------------------------------------
-//                            Overlay touchOverlay = new Overlay(MapsActivity.this) {
-//                                ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay = null;
-//
-//                                @Override
-//                                public void draw(Canvas arg0, MapView arg1, boolean arg2) {
-//
-//                                }
-//
-//                                @Override
-//                                public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
-//
-//                                    final Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.buoy);
-//                                    Projection proj = mapView.getProjection();
-//                                    GeoPoint loc = (GeoPoint) proj.fromPixels((int) e.getX(), (int) e.getY());
-//                                    String longitude = Double.toString(((double) loc.getLongitudeE6()) / 1000000);
-//                                    String latitude = Double.toString(((double) loc.getLatitudeE6()) / 1000000);
-//                                    System.out.println("- Latitude = " + latitude + ", Longitude = " + longitude);
-//                                    return true;
-//                                }
-//                            };
-//                                    ArrayList<OverlayItem> overlayArray = new ArrayList<OverlayItem>();
-//                                    OverlayItem mapItem = new OverlayItem("", "", new GeoPoint((((double)loc.getLatitudeE6())/1000000), (((double)loc.getLongitudeE6())/1000000)));
-//                                    mapItem.setMarker(marker);
-//                                    overlayArray.add(mapItem);
-//                                    if(anotherItemizedIconOverlay==null){
-//                                        anotherItemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(getApplicationContext(), overlayArray,null);
-//                                        mapView.getOverlays().add(anotherItemizedIconOverlay);
-//                                        mapView.invalidate();
-//                                    }else{
-//                                        mapView.getOverlays().remove(anotherItemizedIconOverlay);
-//                                        mapView.invalidate();
-//                                        anotherItemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(getApplicationContext(), overlayArray,null);
-//                                        mapView.getOverlays().add(anotherItemizedIconOverlay);
-//                                    }
-//                                    //      dlgThread();
-//                                    return true;
-//                                }
-//                            };
-//                            map.getOverlays().add(touchOverlay);
-                            //----------------------------------------------------------------------------------
+                            
                         }
                         return false;
                     }
@@ -165,13 +124,13 @@ public class MapsActivity extends AppCompatActivity {
         GeoPoint startPoint = new GeoPoint(global.latitude, global.longitude);
         mapController.setCenter(startPoint);
 
-//        timer = new Timer();
-//
-//        //initialize the TimerTask's job
-//        initializeTimerTask();
-//
-//        //schedule the timer, to wake up every 15 seconds
-//        timer.schedule(timerTask, 15000, 15000);
+        timer = new Timer();
+
+        //initialize the TimerTask's job
+        initializeTimerTask();
+
+        //schedule the timer, to wake up every 15 seconds
+        timer.schedule(timerTask, 15000, 15000);
 
     }
 
@@ -181,33 +140,45 @@ public class MapsActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("MapsAct", "Timer");
-                        items.clear();
-                        for (int i = 0; i < global.buoyList.size(); i++) {
-                            items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
-                            Drawable marker = global.buoyList.get(i).getMarkerIcon();
-                            items.get(items.size() - 1).setMarker(marker);
+                        if(global.hasBuoyBeenUpdated) {
+                            Log.i("MapsAct", "Timer");
+                            global.hasBuoyBeenUpdated=false;
+                            items.clear();
+
+                            Log.i("Buoy2 is on ",global.buoyList.size()+" ");
+
+                            for (int i = 0; i < global.buoyList.size(); i++) {
+                                items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
+                                Drawable marker = global.buoyList.get(i).getMarkerIcon();
+                                items.get(items.size() - 1).setMarker(marker);
+                            }
+
+                            items.add(new OverlayItem("Η Τοποθεσία σας", "", new GeoPoint(global.latitude, global.longitude))); // Lat/Lon decimal degrees
+
+
+                            ItemizedIconOverlay<OverlayItem> mOverlay = new ItemizedIconOverlay<>(getApplicationContext(), items,
+                                    new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                                        @Override
+                                        public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                                            if (index != items.size() - 1) {
+
+                                                global.markerClickIndex = index;
+                                                FragmentManager fm = getSupportFragmentManager();
+                                                FragmentDialog overlay = new FragmentDialog();
+                                                overlay.show(fm, "FragmentDialog");
+                                            }
+                                            return true;
+                                        }
+
+                                        @Override
+                                        public boolean onItemLongPress(final int index, final OverlayItem item) {
+                                            return false;
+                                        }
+                                    });
+                            map.getOverlays().clear();
+                            map.getOverlays().add(mOverlay);
+                            map.invalidate();
                         }
-
-                        items.add(new OverlayItem("Η Τοποθεσία σας", "", new GeoPoint(global.latitude, global.longitude))); // Lat/Lon decimal degrees
-
-
-                        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(getApplicationContext(), items,
-                                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                                    @Override
-                                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                                        //do something
-                                        return true;
-                                    }
-
-                                    @Override
-                                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                                        return false;
-                                    }
-                                });
-                        map.getOverlays().clear();
-
-                        map.getOverlays().add(mOverlay);
                     }
 
                 });
