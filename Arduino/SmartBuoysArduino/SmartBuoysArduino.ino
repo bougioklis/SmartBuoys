@@ -69,6 +69,7 @@ struct BuoyStruck Buoy;
 
 boolean IsfirstLoop =true;
 boolean finishedParsing=false;
+boolean isAutoDriving =false;
 
 unsigned long previousMillis = 0; // last time latitude,longtitude and orientation was send to server
 long interval = 10000; // send LatLng and orientation to server every 10seconds
@@ -167,16 +168,18 @@ void loop() {
   manageLEDS();
   getHeading();
 
-  if(Buoy.steering !=0 || Buoy.throttle!=0){
+  if((Buoy.steering !=0 || Buoy.throttle!=0) && !isAutoDriving){
       driveBuoy();
   }
 //Serial.println((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <0.010));
-  if((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) >0.010) ){
+  if((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) >10) ){
 //  Serial.println("MPIKE??");
     AutoDriveBuoy();    
+    isAutoDriving =true;
   }
 
-  if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <0.010){
+  if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <10 && isAutoDriving){
     stopMoving();
+    isAutoDriving=false;
   }
 }
