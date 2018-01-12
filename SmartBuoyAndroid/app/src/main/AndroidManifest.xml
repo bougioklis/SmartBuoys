@@ -35,13 +35,14 @@
 
         <activity android:name=".MenuOptions.SettingsAtivity" />
         <activity android:name=".MenuOptions.AboutUsActivity" />
-        <activity android:name=".MenuOptions.TutorialActivity"></activity>
+        <activity android:name=".MenuOptions.TutorialActivity" />
 
         <service
             android:name=".Service.DownloadService"
             android:enabled="true"
-            android:stopWithTask="true"/>
+            android:stopWithTask="true" />
 
+        <activity android:name=".NavigationMapsActivity"></activity>
     </application>
 
 </manifest>

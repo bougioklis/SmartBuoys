@@ -10,8 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
@@ -25,14 +23,10 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.util.constants.MapViewConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,8 +105,10 @@ public class MapsActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemLongPress(final int index, final OverlayItem item) {
                         if (index != items.size() - 1) {
-                            items.get(index).setMarker(global.buoyList.get(index).getSelectedMarker());
-                            
+//                            items.get(index).setMarker(global.buoyList.get(index).getSelectedMarker());
+
+                            global.markerClickIndex = index;
+                            startActivity(new Intent(MapsActivity.this,NavigationMapsActivity.class));
                         }
                         return false;
                     }
