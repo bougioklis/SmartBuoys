@@ -9,3 +9,4 @@ Webserver:
 
 
 Android:
+* on open close camera flag  mediaPlayer.release on RTSPActivity on line 265  crashes

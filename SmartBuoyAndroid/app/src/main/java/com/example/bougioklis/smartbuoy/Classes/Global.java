@@ -33,7 +33,7 @@ import java.util.List;
 public class Global extends Application {
 
     //metablites gia thn ip
-    public String selectAllURL, updateURL, MQTTURL;
+    public String selectAllURL, updateURL, MQTTURL,navigationUrl;
 
     // h topo8esia tou user
     public double latitude, longitude;
@@ -293,6 +293,50 @@ public class Global extends Application {
         return null;
     }
 
+    //sunarthsh gia update twn shmadourwn
+    public String updateBuoyNavigation(BuoyClass buoy) {
+
+        String updateB = navigationUrl;
+
+        try {
+            URL url = new URL(updateB);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+
+
+            String data = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(buoy.getId() + "", "UTF-8")
+                    + "&" + URLEncoder.encode("targetLat", "UTF-8") + "=" + URLEncoder.encode(buoy.getTargetLat()+"", "UTF-8")
+                    + "&" + URLEncoder.encode("targetLng", "UTF-8") + "=" + URLEncoder.encode(buoy.getTargetLng()+"", "UTF-8");
+
+
+            Log.i("data are", data);
+
+            bufferedWriter.write(data);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+
+            outputStream.close();
+
+
+            InputStream inputstream = httpURLConnection.getInputStream();
+
+            StringBuilder result = inputToString(inputstream);
+
+            Log.i("response", result.toString());
+            return result.toString();
+        } catch (MalformedURLException e) {
+            Log.i("MalformedURL", e.toString());
+        } catch (IOException e) {
+            flagIOException = true;
+            Log.i("IOException", e.toString());
+        }
+        return null;
+    }
 
 
 }

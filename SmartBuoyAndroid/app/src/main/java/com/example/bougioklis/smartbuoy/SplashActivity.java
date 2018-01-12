@@ -64,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
             //arxikopoihsh twn url
             global.selectAllURL = "http://" + server_ip + "/WebServer/SelectAllBuoys.php";
             global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
+            global.navigationUrl = "http://"+server_ip+"/WebServer/NavigationBuoy.php";
             global.MQTTURL = "tcp://" + server_ip + ":1883";
 
 

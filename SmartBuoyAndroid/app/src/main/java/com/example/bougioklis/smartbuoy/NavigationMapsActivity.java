@@ -1,5 +1,7 @@
 package com.example.bougioklis.smartbuoy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
@@ -7,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -91,10 +94,30 @@ public class NavigationMapsActivity extends AppCompatActivity {
 
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
-            public boolean singleTapConfirmedHelper(GeoPoint p) {
+            public boolean singleTapConfirmedHelper( final  GeoPoint p) {
                 Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
 
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NavigationMapsActivity.this);
+                alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.alertDialog) + " "+p.getLatitude()+" , "+p.getLongitude());
+                        alertDialogBuilder.setPositiveButton("Ναί",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        global.buoyList.get(global.markerClickIndex).setTargetLat(p.getLatitude());
+                                        global.buoyList.get(global.markerClickIndex).setTargetLng(p.getLongitude());
+                                        updateBuoy();
+                                    }
+                                });
 
+                alertDialogBuilder.setNegativeButton("Άκυρο",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
                 return false;
             }
 
@@ -110,6 +133,39 @@ public class NavigationMapsActivity extends AppCompatActivity {
     }
 
 
+    private void updateBuoy() {
+
+        final String[] result = new String[1];
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //kanoume update apo ton server
+                    result[0] = global.updateBuoyNavigation(global.buoyList.get(global.markerClickIndex));
+                } catch (Exception e) {
+                    Log.i("Thread Exce", e.toString());
+                } finally {
+                    global.activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // afou ektelestei to download pigainoume edw
+                            if (global.flagIOException) {
+                                Toast.makeText(global.context, R.string.unableToUpdate, Toast.LENGTH_LONG).show();
+                                global.flagIOException = false;
+                            }
+                            if (result[0].equals("-1")) {
+                                Toast.makeText(global.context, R.string.serverError, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(global.context, R.string.updateSuccessful, Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
 
 
 }
