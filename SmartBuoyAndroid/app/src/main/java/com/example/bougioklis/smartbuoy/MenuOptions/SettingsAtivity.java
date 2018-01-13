@@ -33,7 +33,8 @@ public class SettingsAtivity extends AppCompatActivity {
         global = ((Global) getApplicationContext());
 
         Intent intent =this.getIntent();
-        if (intent != null) {
+
+        if (intent.hasExtra("id")) {
             intentHelper = intent.getExtras().getString("id");
         }
 
@@ -85,6 +86,7 @@ public class SettingsAtivity extends AppCompatActivity {
         Log.i("back pressed","pressed");
        if (intentHelper != null){
            startActivity(new Intent(SettingsAtivity.this, SplashActivity.class));
+            finish();
        }
         super.onBackPressed();  // optional depending on your needs
     }

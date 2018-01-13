@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ public class RTSPActivity extends AppCompatActivity {
     Switch cameraSwitch;
     SeekBar throttle,steering;
     TextView throttleTV,steeringTV;
+    Button stopButton;
 
     // h lista mas 8a exei stis prwtes 8eseis tis simadoures kai sthn teleutaia marker me thn topo8esia tou user
     private List<OverlayItem> items = new ArrayList<>();
@@ -89,6 +91,16 @@ public class RTSPActivity extends AppCompatActivity {
         throttleTV = (TextView) findViewById(R.id.throttleTextView);
         steering = (SeekBar) findViewById(R.id.steering);
         steeringTV = (TextView) findViewById(R.id.steeringTextView);
+        stopButton = (Button) findViewById(R.id.stop);
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mqttHelper.connect(buoy.getDriveTopicID());
+                mqttHelper.publishMessage(buoy.getDriveTopicID(),"Throttle:0///Steering:0");
+            }
+        });
+
         final int[] progressThrottle = new int[1];
         final int[] progressSterring = new int[1];
 

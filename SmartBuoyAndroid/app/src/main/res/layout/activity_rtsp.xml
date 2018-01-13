@@ -47,6 +47,13 @@
             android:text="Camera flag"
             android:textColor="@color/black"
             android:textSize="18sp"/>
+        <Button
+            android:id="@+id/stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop Buoy"
+            android:layout_below="@+id/cameraSwitch"
+            android:paddingTop="5dp"/>
 
         <SeekBar
             android:id="@+id/throttle"

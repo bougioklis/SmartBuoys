@@ -73,12 +73,16 @@ public class MapsActivity extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-
-        //dhmiourgoume markers me tis shmadoures
-        for (int i = 0; i < global.buoyList.size(); i++) {
-            items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
-            Drawable marker = global.buoyList.get(i).getMarkerIcon();
-            items.get(items.size() - 1).setMarker(marker);
+        try {
+            //dhmiourgoume markers me tis shmadoures
+            for (int i = 0; i < global.buoyList.size(); i++) {
+                items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
+                Drawable marker = global.buoyList.get(i).getMarkerIcon();
+                items.get(items.size() - 1).setMarker(marker);
+            }
+        }catch (NullPointerException e){
+            startActivity(new Intent(MapsActivity.this,SettingsAtivity.class).putExtra("id","SplashActivity"));
+            finish();
         }
 
         IMapController mapController = map.getController();

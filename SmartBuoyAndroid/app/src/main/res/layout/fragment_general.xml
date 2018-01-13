@@ -25,13 +25,25 @@
         android:gravity="center"
         android:paddingTop="25dp"/>
 
+    <TextView
+        android:id="@+id/buoyID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_below="@+id/orientation"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="25dp"/>
+
 
     <Switch
         android:id="@+id/hoverSwitch"
         android:text="HOVER"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/orientation"
+        android:layout_below="@+id/buoyID"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="18sp"

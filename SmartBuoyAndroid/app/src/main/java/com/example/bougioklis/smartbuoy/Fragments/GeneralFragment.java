@@ -22,7 +22,7 @@ import com.example.bougioklis.smartbuoy.R;
 public class GeneralFragment extends Fragment{
 
     //ta stoixeia apo to XML
-    TextView location, orientation;
+    TextView location, orientation,buoyID;
     Switch hover;
 
 
@@ -54,6 +54,7 @@ public class GeneralFragment extends Fragment{
         //briskoume ta views apo to XML
         location = (TextView) view.findViewById(R.id.location);
         orientation  = (TextView) view.findViewById(R.id.orientation);
+        buoyID = (TextView) view.findViewById(R.id.buoyID);
 
         hover = (Switch) view.findViewById(R.id.hoverSwitch);
 
@@ -61,7 +62,7 @@ public class GeneralFragment extends Fragment{
 
         location.setText("Η σημαδούρα βρίσκεται στις συντεταγμένες: "+buoy.getLat()+" "+buoy.getLng());
         orientation.setText("Η σημαδούρα κοιτάει: "+buoy.getOrientationString());
-
+        buoyID.setText("Το ID της σημαδούρας είναι " +buoy.getId() );
 //        if(buoy.isHoverflag())
 //            hover.setChecked(true);
 //        else

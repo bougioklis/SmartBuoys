@@ -26,7 +26,7 @@ byte mac[] = {
 
 // Available IP address on  network here,
 // for manual configuration:
-IPAddress ip(192, 168, 1, 3);
+IPAddress ip(192, 168, 0, 3);
 
 // fill in your Domain Name Server address here:
 IPAddress myDns(1, 1, 1, 1);
@@ -38,7 +38,7 @@ EthernetClient Etheclient;
 Servo servoMotor; 
 
 //MQTT server and port
-const char* mqttServer = "192.168.1.1";
+const char* mqttServer = "192.168.0.71";
 const int mqttPort = 1883;
 
 //MQTT client
