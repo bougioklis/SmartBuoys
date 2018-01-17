@@ -11,11 +11,17 @@ error_reporting(E_ALL);
 include_once "phpMQTT.php";
 require 'Init.php';
 
-$server = "192.168.1.1";     // change if necessary
+$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+socket_connect($sock, "8.8.8.8", 53);
+socket_getsockname($sock, $name); // $name passed by reference
+
+$localAddr = $name;
+
+$server =$name;     // change if necessary
 $port = 1883;                     // change if necessary
 $username = "";                   // set your username
 $password = "";                   // set your password
-$client_id = "phpMQTTUpdater"; // make sure this is unique for connecting to sever - you could use uniqid()
+$client_id = uniqid(); // make sure this is unique for connecting to sever - you could use uniqid()
 
 $mqtt = new phpMQTT($server, $port, $client_id);
 
@@ -80,7 +86,7 @@ function procmsg($topic, $msg){
 	$idParts =explode("=",$msgParts[3]);
 	$id = $idParts[1];//has the actual id
 
-	$sql = "UPDATE Buoy SET orientation=".$orientation.",latitude=".$Lat.",longitude=".$Lng." WHERE ID =".$id ;
+	$sql = "UPDATE Buoy SET orientation=".$orientation." WHERE ID =".$id ;
 
 	if(mysqli_query($conn,$sql)){
 		echo "success";

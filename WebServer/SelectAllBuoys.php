@@ -14,20 +14,20 @@ if($result){
 	$finalResult = array();
 	//while we have buoys  fetch results
 	while ($row = $result -> fetch_assoc() ){
-		$id   = $row[ID];
-		$lat  = $row[latitude];
-		$lng  = $row[longitude];
-		$orientation = $row[orientation];
-		$LED1  = $row[LED1];
-		$LED2  = $row[LED2];
-		$LED3  = $row[LED3];
-		$RGB1  = $row[RGB1];
-		$RGB2  = $row[RGB2];
-		$RGB3  = $row[RGB3];
-		$targetLat = $row[targetLat];
-		$targetLng = $row[targetLng];
-		$hover = $row[hoverFlag];
-		$camera = $row[cameraFlag];
+		$id   = $row["ID"];
+		$lat  = $row["latitude"];
+		$lng  = $row["longitude"];
+		$orientation = $row["orientation"];
+		$LED1  = $row["LED1"];
+		$LED2  = $row["LED2"];
+		$LED3  = $row["LED3"];
+		$RGB1  = $row["RGB1"];
+		$RGB2  = $row["RGB2"];
+		$RGB3  = $row["RGB3"];
+		$targetLat = $row["targetLat"];
+		$targetLng = $row["targetLng"];
+		$hover = $row["hoverFlag"];
+		$camera = $row["cameraFlag"];
 
 		// push results on an array
 		array_push($buoy, $id);

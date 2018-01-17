@@ -28,5 +28,5 @@ if($stmt = $conn -> prepare($sql)){
 	}
 }
 
-//calling mqtt function to alert Bupt about the changes
+//calling mqtt function to alert Buoy about the changes
 MQTTPublish("Buoy".$id,$id);

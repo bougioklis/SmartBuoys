@@ -17,12 +17,16 @@ require 'publishMqtt.php';
 
 //Our Server's ip
 
-//$server = $_SERVER["SERVER_ADDR"];
-$server = "192.168.1.1";     // change if necessary
+$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+socket_connect($sock, "8.8.8.8", 53);
+socket_getsockname($sock, $name); // $name passed by reference
+
+$server = $name;
+
 $port = 1883;                     // change if necessary
 $username = "";                   // set your username
 $password = "";                   // set your password
-$client_id = "phpMQTT-subscriber"; // make sure this is unique for connecting to sever - you could use uniqid()
+$client_id = uniqid();		 // make sure this is unique for connecting to sever - you could use uniqid()
 
 // create Mqtt object
 $mqttSub = new phpMQTT($server, $port, $client_id);
@@ -35,7 +39,6 @@ if(!$mqttSub->connect(true, NULL, $username, $password)) {
 $topics['BuoyConnected'] = array("qos" => 0, "function" => "procmsg");
 $mqttSub->subscribe($topics, 0);
 while($mqttSub->proc()){
-		
 }
 $mqttSub->close();
 

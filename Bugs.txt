@@ -1,12 +1,9 @@
 Arduino:
-*Manual driving (10/1/18) was not receiving messages from broker check 
-  another internet connection
 
 
 
 Webserver:
 *Crontab to run subscribeMQTT.php and subscribeMqttUpdateOriLatLng.php
-*Upload from raspberry the new files
 
 
 

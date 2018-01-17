@@ -1,19 +1,21 @@
 <?php
 /*
 *Created By Bougioklis George
-* Function which  publish mqtt on specific topic abou a buoy
+* Function which publish mqtt on specific topic abou a buoy
 */
+
 function MQTTPublish($topic,$id){
 
 require_once "phpMQTT.php";
 require 'Init.php';
 
-//$id = $_POST['id'];
+// find local ip eg 192.168.1.1
+$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+socket_connect($sock, "8.8.8.8", 53);
+socket_getsockname($sock, $name); // $name passed by reference
 
+$server= $name;
 
-$server= "192.168.1.1";
-//$server =  $_SERVER['SERVER_ADDR'];
-//echo $server;
 $port =1883;
 $username = "";
 $password = "";
@@ -33,23 +35,23 @@ $stmt -> bind_param("i",$id);
 
 		$buoy = array();
 		$finalResult = array();
-		//fetch result
+
 		$row = $store -> fetch_assoc();
 
-			$id   = $row[ID];
-			$lat  = $row[latitude];
-			$lng  = $row[longitude];
-			$orientation = $row[orientation];
-			$LED1  = $row[LED1];
-			$LED2  = $row[LED2];
-			$LED3  = $row[LED3];
-			$RGB1  = $row[RGB1];
-			$RGB2  = $row[RGB2];
-			$RGB3  = $row[RGB3];
-			$targetLat = $row[targetLat];
-			$targetLng = $row[targetLng];
-			$hover = $row[hoverFlag];
-			$camera = $row[cameraFlag];
+			$id   = $row["ID"];
+			$lat  = $row["latitude"];
+			$lng  = $row["longitude"];
+			$orientation = $row["orientation"];
+			$LED1  = $row["LED1"];
+			$LED2  = $row["LED2"];
+			$LED3  = $row["LED3"];
+			$RGB1  = $row["RGB1"];
+			$RGB2  = $row["RGB2"];
+			$RGB3  = $row["RGB3"];
+			$targetLat = $row["targetLat"];
+			$targetLng = $row["targetLng"];
+			$hover = $row["hoverFlag"];
+			$camera = $row["cameraFlag"];
 
 	}else{
 
