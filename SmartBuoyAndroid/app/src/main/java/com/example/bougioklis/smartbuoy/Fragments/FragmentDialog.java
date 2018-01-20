@@ -44,10 +44,10 @@ public class FragmentDialog extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState)
     {
         global = ((Global) getActivity().getApplicationContext());
-//arxikopoihsh tou dialog box
+        //dialog box initialization
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.YELLOW));
+
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -90,7 +90,7 @@ public class FragmentDialog extends DialogFragment {
 
         @Override
         public Fragment getItem(int position) {
-            // epilegoume poio fragment 8a deiksoume
+            // select which fragment will be shown
             switch (position){
                 case 0: {
                     return new GeneralFragment();
@@ -114,7 +114,7 @@ public class FragmentDialog extends DialogFragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            //titlos ka8e fragment
+            //title of each fragment
             switch (position) {
                 case 0:
                     return "Γενικές Πληροφορίες";

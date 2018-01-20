@@ -80,12 +80,8 @@ public class RTSPActivity extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-//        Log.i("topic",buoy.getTopicID());
 
-//        mqttHelper = new MqttHelper(getApplicationContext(),buoy.getTopicID());
-
-//        mqttHelper.connect();
-//        mqttHelper.publishMessage("hello world from android");
+        //XML Views
         global = ((Global) getApplicationContext());
         throttle = (SeekBar) findViewById(R.id.throttle);
         throttleTV = (TextView) findViewById(R.id.throttleTextView);
@@ -93,22 +89,24 @@ public class RTSPActivity extends AppCompatActivity {
         steeringTV = (TextView) findViewById(R.id.steeringTextView);
         stopButton = (Button) findViewById(R.id.stop);
 
+        //onClick stop the buoy
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mqttHelper.connect(buoy.getDriveTopicID());
-                mqttHelper.publishMessage(buoy.getDriveTopicID(),"Throttle:0///Steering:0");
+                mqttHelper.publishMessage(buoy.getDriveTopicID(),"Throttle:0///Steering:90");
             }
         });
 
         final int[] progressThrottle = new int[1];
         final int[] progressSterring = new int[1];
 
+        // show the throttle to user
         throttle.setProgress(global.buoyList.get(global.markerClickIndex).getThrottle());
         progressThrottle[0]= global.buoyList.get(global.markerClickIndex).getThrottle();
         throttleTV.setText(getString(R.string.throttle)+" : "+global.buoyList.get(global.markerClickIndex).getThrottle()+"");
 
-
+        //show the steering position to user
         steering.setProgress(global.buoyList.get(global.markerClickIndex).getSteering());
         progressSterring[0]=global.buoyList.get(global.markerClickIndex).getSteering();
         steeringTV.setText(getString(R.string.steering)+" : "+global.buoyList.get(global.markerClickIndex).getSteering()+"");
@@ -126,9 +124,13 @@ public class RTSPActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                //set to throttle textview the progress
                 throttleTV.setText(getApplicationContext().getString(R.string.throttle)+": "+ progressThrottle[0]);
+                //set on global buoylist the throttle power
                 global.buoyList.get(global.markerClickIndex).setThrottle(progressThrottle[0]);
+                // connect to mqtt
                 mqttHelper.connect(buoy.getDriveTopicID());
+                //publish on mqtt
                 mqttHelper.publishMessage(buoy.getDriveTopicID(),"Throttle:"+progressThrottle[0]+"///Steering:"+progressSterring[0]);
             }
         });
@@ -146,6 +148,7 @@ public class RTSPActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                //same as throttle SeekBar
                 steeringTV.setText(getApplicationContext().getString(R.string.steering)+": "+progressSterring[0]);
                 global.buoyList.get(global.markerClickIndex).setSteering(progressSterring[0]);
                 mqttHelper.connect(buoy.getDriveTopicID());
@@ -161,6 +164,7 @@ public class RTSPActivity extends AppCompatActivity {
 
         startMqtt();
 
+        //add two markers on the map one for the user and one for the buoy
         items.add(new OverlayItem("", "", new GeoPoint(buoy.getLat(), buoy.getLng())));
         Drawable marker = buoy.getMarkerIcon();
         items.get(items.size() - 1).setMarker(marker);
@@ -185,7 +189,7 @@ public class RTSPActivity extends AppCompatActivity {
                     public boolean onItemLongPress(final int index, final OverlayItem item) {
                         return false;
                     }
-                });  // <----- removed the mResourceProxy parameter
+                });
         mOverlay.setFocusItemsOnTap(true);
 
         map.getOverlays().add(mOverlay);
@@ -204,42 +208,23 @@ public class RTSPActivity extends AppCompatActivity {
         cameraSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //tropopoioume ta stoixeia sthn lista me tis allages
+                //modify the list and update DB
                 global.buoyList.get(global.markerClickIndex).setCameraflag(!buoy.isCameraflag());
                 updateBuoy();
                 if (global.buoyList.get(global.markerClickIndex).isCameraflag()) {
+                    //we show rtsp stream
                     showRtspStream();
                 } else {
-                    //den deixnoume rtsp stream
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
+                    //we pause the camera
+                    mediaPlayer.pause();
+//                    mediaPlayer.release();
                 }
             }
         });
-        // Configure the view that renders live video.
-
-//        https://github.com/controlwear/virtual-joystick-android
-//        apo to parapanw link einia to joystick
-
-//        JoystickView joystick = (JoystickView) findViewById(R.id.joystick);
-//        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
-//            @Override
-//            public void onMove(int angle, int strength) {
-//                System.out.println("angle is " + angle + " strength is " + strength);
-//                //sto angleTextview mhpws na kanoume mia sunarthsh na pernaei orientation anti gia moires?
-//                angleTextView.setText("Angle is " + angle);
-//                strengthTextView.setText("Strength is " + strength + "%");
-//                mqttHelper.connect(buoy.getDriveTopicID());
-//                mqttHelper.publishMessage(buoy.getDriveTopicID(),"strength:"+strength+"///angle:"+angle);
-//
-//            }
-//        });
-
-
     }
 
     public void showRtspStream(){
-        //deixnoume rtsp stream
+        //rtsp stream
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -248,7 +233,7 @@ public class RTSPActivity extends AppCompatActivity {
                 mediaPlayer.setDisplay(surfaceHolder);
 
                 Context context = global.activity.getApplicationContext();
-//                Map<String, String> headers = getRtspHeaders();
+
                 Uri source = Uri.parse(RTSP_URL_TEST);
 
                 try {
@@ -312,7 +297,7 @@ public class RTSPActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    //kanoume update apo ton server
+                    //background thread
                     result[0] = global.updateBuoys(global.buoyList.get(global.markerClickIndex));
                 } catch (Exception e) {
                     Log.i("Thread Exce", e.toString());
@@ -320,14 +305,17 @@ public class RTSPActivity extends AppCompatActivity {
                     global.activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // afou ektelestei to download pigainoume edw
+
                             if (global.flagIOException) {
+                                //IOException
                                 Toast.makeText(global.context, R.string.unableToUpdate, Toast.LENGTH_LONG).show();
                                 global.flagIOException = false;
                             }
                             if (result[0].equals("-1")) {
+                                // server side error
                                 Toast.makeText(global.context, R.string.serverError, Toast.LENGTH_LONG).show();
                             } else {
+                                //updated Successfully
                                 Toast.makeText(global.context, R.string.updateSuccessful, Toast.LENGTH_LONG).show();
 
                             }
@@ -356,8 +344,6 @@ public class RTSPActivity extends AppCompatActivity {
             @Override
             public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
                 Log.w("Debug",mqttMessage.toString());
-//                dataReceived.setText(mqttMessage.toString());
-
             }
 
             @Override
@@ -371,6 +357,8 @@ public class RTSPActivity extends AppCompatActivity {
     public void onBackPressed(){
         // code here to show dialog
         Log.i("back pressed","pressed");
+
+        // unsubscribe from connected topics
         mqttHelper.unsubscribeFromTopic(buoy.getDriveTopicID());
         mqttHelper.unsubscribeFromTopic(buoy.getTopicID());
         super.onBackPressed();  // optional depending on your needs

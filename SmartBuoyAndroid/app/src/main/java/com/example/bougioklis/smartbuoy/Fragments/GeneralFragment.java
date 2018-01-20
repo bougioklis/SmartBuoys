@@ -21,12 +21,12 @@ import com.example.bougioklis.smartbuoy.R;
  */
 public class GeneralFragment extends Fragment{
 
-    //ta stoixeia apo to XML
+    //XML views
     TextView location, orientation,buoyID;
     Switch hover;
 
 
-    // h shmadoura pou pathsame
+    //which buoy has been selected
     BuoyClass buoy;
 
     Global global;
@@ -47,11 +47,11 @@ public class GeneralFragment extends Fragment{
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // briskoume pia shmadoura pathse
+        // select buoy
         global =((Global) getActivity().getApplicationContext());
         buoy = global.buoyList.get(global.markerClickIndex);
 
-        //briskoume ta views apo to XML
+        // XML views
         location = (TextView) view.findViewById(R.id.location);
         orientation  = (TextView) view.findViewById(R.id.orientation);
         buoyID = (TextView) view.findViewById(R.id.buoyID);
@@ -63,17 +63,14 @@ public class GeneralFragment extends Fragment{
         location.setText("Η σημαδούρα βρίσκεται στις συντεταγμένες: "+buoy.getLat()+" "+buoy.getLng());
         orientation.setText("Η σημαδούρα κοιτάει: "+buoy.getOrientationString());
         buoyID.setText("Το ID της σημαδούρας είναι " +buoy.getId() );
-//        if(buoy.isHoverflag())
-//            hover.setChecked(true);
-//        else
-//            hover.setChecked(false);
+
         hover.setChecked(buoy.isHoverflag());
 
 
         hover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //tropopoioume ta stoixea kai kanoume update tis shmadoures ston server
+                //modify the specific buoy on the buoyList and then we update DB
                 global.buoyList.get(global.markerClickIndex).setHoverflag(!buoy.isHoverflag());
                 updateBuoy();
             }
@@ -85,12 +82,12 @@ public class GeneralFragment extends Fragment{
 
         final String[] result = new String[1];
 
-        //dhmiourgia background thread
+        //background thread
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    //kanoume update ston server
+                    //update on server
                    result[0] = global.updateBuoys(global.buoyList.get(global.markerClickIndex));
                 } catch (Exception e) {
                     Log.i("Thread Exce", e.toString());
@@ -98,17 +95,16 @@ public class GeneralFragment extends Fragment{
                     global.activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // afou ektelestei to download pigainoume edw
-                            //an uparxei IOEXCEPTION
+                            //if there is an IOException
                             if (global.flagIOException) {
                                 Toast.makeText(global.context, R.string.unableToUpdate, Toast.LENGTH_LONG).show();
                                 global.flagIOException= false;
                             }
                             if (result[0].equals("-1")){
-                                //an epestrepse error apo ton server
+                                //if there is a server error
                                 Toast.makeText(global.context, R.string.serverError, Toast.LENGTH_LONG).show();
                             }else {
-                                //to update egine epituxws
+                                //updated successfully
                                 Toast.makeText(global.context, R.string.updateSuccessful, Toast.LENGTH_LONG).show();
                             }
                         }

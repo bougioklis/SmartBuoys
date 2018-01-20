@@ -23,12 +23,13 @@ import java.io.UnsupportedEncodingException;
  * Created by Bougioklis on 24-Dec-17.
  */
 
-// classh gia mqtt subscribe, unsubscribe kai publish
+// class for mqtt subscribe, unsubscribe and publish
 public class MqttHelper {
 
     public MqttAndroidClient mqttAndroidClient;
     Global global;
-    //mqtt client kai server
+
+    //mqtt client and server
     String server,client;
 
     public MqttHelper(Context context){
@@ -63,7 +64,7 @@ public class MqttHelper {
         });
     }
 
-    // connect sto mqtt server
+    // connect to mqtt server
     public void connect(final String topic){
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
@@ -94,7 +95,7 @@ public class MqttHelper {
         }
     }
 
-    //sunarthsh gia subscribe sto topic
+
     private void subscribeToTopic(String topic) {
         try {
             mqttAndroidClient.subscribe(topic, 0, null, new IMqttActionListener() {
@@ -115,7 +116,7 @@ public class MqttHelper {
         }
     }
 
-    //publish to message sto mqtt topic
+    //publish  message
     public void publishMessage(String topic,String publishMessage){
 
         String payload = publishMessage;

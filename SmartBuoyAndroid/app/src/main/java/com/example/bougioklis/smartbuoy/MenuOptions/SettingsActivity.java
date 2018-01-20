@@ -14,7 +14,7 @@ import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.R;
 import com.example.bougioklis.smartbuoy.SplashActivity;
 
-public class SettingsAtivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     EditText ip,cameraIp;
     Button submit;
@@ -34,6 +34,7 @@ public class SettingsAtivity extends AppCompatActivity {
 
         Intent intent =this.getIntent();
 
+        // if intent has extra id  then put that string ti intentHelper
         if (intent.hasExtra("id")) {
             intentHelper = intent.getExtras().getString("id");
         }
@@ -42,10 +43,12 @@ public class SettingsAtivity extends AppCompatActivity {
         ip = (EditText) findViewById(R.id.ip);
         cameraIp = (EditText) findViewById(R.id.rtsp);
 
+        // initialize the shared preference
         SharedPreferences prefs = getSharedPreferences(sharedPreferenceID, MODE_PRIVATE);
         String server_ip = prefs.getString("IP", null);
         String camera_ip = prefs.getString("CameraIP",null);
 
+        //if these two vars are null then the user has to enter the ip
         if (server_ip != null ) {
             ip.setText(server_ip);
             Log.i("ip",server_ip);
@@ -62,6 +65,7 @@ public class SettingsAtivity extends AppCompatActivity {
                 if (ip.getText().toString().isEmpty() || cameraIp.getText().toString().isEmpty()){
                     Toast.makeText(getApplicationContext(),"Παρακαλώ συμπληρώστε και τα δύο πεδία!",Toast.LENGTH_LONG).show();
                 }else{
+                    //update shared preferences
                     SharedPreferences.Editor editor = getSharedPreferences(sharedPreferenceID, MODE_PRIVATE).edit();
                     editor.putString("IP", ip.getText().toString());
                     editor.putString("CameraIP", cameraIp.getText().toString());
@@ -84,8 +88,10 @@ public class SettingsAtivity extends AppCompatActivity {
     public void onBackPressed(){
         // code here to show dialog
         Log.i("back pressed","pressed");
+
+       // if intentHelper is set then go to SplashActivity
        if (intentHelper != null){
-           startActivity(new Intent(SettingsAtivity.this, SplashActivity.class));
+           startActivity(new Intent(SettingsActivity.this, SplashActivity.class));
             finish();
        }
         super.onBackPressed();  // optional depending on your needs

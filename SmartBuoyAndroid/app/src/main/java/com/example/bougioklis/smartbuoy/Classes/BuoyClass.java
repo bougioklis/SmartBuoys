@@ -11,18 +11,21 @@ import com.example.bougioklis.smartbuoy.R;
 
 public class BuoyClass {
 
-    //to id kai to orientation ths shmadouras
+    //The unique Id of each Buoy and the orientation from the compass
     int id,orientation;
-    //lat,lng ths simadouras, targetLat,TargetLng oi suntetagmenes pou 8a prepei na paei h shmadoura
+    //lat,lng of the Buoy, targetLat,TargetLng oi the coordinates that the buoy has to go to
     double lat,lng,targetLat,targetLng;
-    //leds 1 h 0 analoga me to an einai svista h oxi, hover kai camera flags
-    boolean led1,led2,led3,hoverflag,cameraflag;
-    // TODO: 05-Jan-18 elegxos an h shmadoura exei targetlat,targetlng na einia to hover 0
 
-    //rgbs se 16diki morfi. orientationString analoga me to orientation pernei times "βορειοδυτικα ktlp"
-    //topic ID exei thn morfi Buoy+ID  gia to MQTT kai to driveTopicID exei morfi Buoy+ID+Drive
+    // true or false
+    boolean led1,led2,led3,hoverflag,cameraflag;
+
+    //rgbs on hex  if a rgb is equal to off then it is off.
+    // orientationString = "βορειοδυτικα ktlp"
+    //topic ID  is  "Buoy+ID"  for the MQTT protocol  and driveTopicID "Buoy+ID+Drive"
     String RGB1,RGB2,RGB3,orientationString,topicID,driveTopicID;
+
     Drawable markerIcon,selectedMarker;
+    //default throttle and steering
     int throttle=0,steering=90;
 
     public BuoyClass(int id, int orientation, double lat, double lng, double targetLat, double targetLng,
@@ -49,7 +52,7 @@ public class BuoyClass {
         calculateIcon(orientation,ct);
     }
 
-    //sunarthsh gia na upologisoume me vash to orientation tis eikones kai to OrientationString pou 8a xrhsimopoihsoume
+    //function to calc based on ori the buoy's markericon and the orientationString
     public void calculateIcon(int orientation, Context ct){
 
         if((orientation>=0 && orientation<=22) || (orientation>=338 && orientation<=360)){

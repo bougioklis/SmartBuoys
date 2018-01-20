@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
-import com.example.bougioklis.smartbuoy.MenuOptions.SettingsAtivity;
+import com.example.bougioklis.smartbuoy.MenuOptions.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,55 +44,55 @@ public class SplashActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         /*
-        * Sto sugkekrimeno activity 8a kanoume initialize otidipote
-        * xreiastei na ginei me GLOBAL class, epishs se auto to
-        * activity 8a checkaroume an gps is available, kai an
-        * exoume internet genika otidipote xreiastei elegxo 8a elegxetai edw
+        * initialize everything from the global class
+        * check if GPS is available,
         */
 
-        //arxikopoiw tis global listes
+        // TODO: 20-Jan-18  check if is connected on wifi and if the specific wifi has our php files
+
+        //initialize global lists
         global = ((Global) getApplicationContext());
         global.buoyList = new ArrayList<>();
 
+        //shared preferences for the ip
         SharedPreferences prefs = getSharedPreferences(sharedPreferenceID, MODE_PRIVATE);
         server_ip = prefs.getString("IP", null);
 
         Log.i("serverIP IF",(server_ip==null) +"");
 
         if (server_ip!= null) {
-
-            //arxikopoihsh twn url
+        //if ip is saved on shared preference initialize the url vars
             global.selectAllURL = "http://" + server_ip + "/WebServer/SelectAllBuoys.php";
             global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
             global.navigationUrl = "http://"+server_ip+"/WebServer/NavigationBuoy.php";
             global.MQTTURL = "tcp://" + server_ip + ":1883";
-
-
         } else {
-            Log.i("MPIKE","MPIKE");
-            Intent intent = new Intent(SplashActivity.this,SettingsAtivity.class);
+            // intent on Settings Activity to change the ip
+            Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
+            //unique id to know from which activity we went on settings activity
             intent.putExtra("id","SplashActivity");
             startActivity(intent);
         }
-        //h pernw coors
+
+
         gps = new GPS(getApplicationContext());
         if (!gps.isGPSEnabled) {
             buildAlertMessageNoGPS();
         }
 
         if(server_ip!=null){
+            //if we have saved ip on shared preferences  download from DB
             downloadFromServer();
         }
 
     }
 
     void downloadFromServer(){
-        //dhmiourgoume background thread
+        //background thread
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    //kanoume download apo ton server
                     global.buoyList = global.downloadBuoys();
                 } catch (Exception e) {
                     Log.i("Thread Exce", e.toString());
@@ -100,7 +100,7 @@ public class SplashActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // afou ektelestei to download pigainoume edw
+                            //IOException
                             if (global.flagIOException) {
                                 Toast.makeText(getApplicationContext(), R.string.unableToDownload, Toast.LENGTH_LONG).show();
                                 global.flagIOException = false;
@@ -241,34 +241,4 @@ public class SplashActivity extends AppCompatActivity {
         final AlertDialog alert = builder.create();
         alert.show();
     }
-
-//    //apotelesma apo to request gia gps permission
-//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case 1: {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    startActivity(new Intent(SplashActivity.this,MapsActivity.class));
-//
-//                } else {
-//                    Toast.makeText(getApplicationContext(),"Η συγκεκριμένη εφαρμογή χρειάζεται να έχει πρόσβαση στην τοποθεσία σας." +
-//                            "\rΠαρακαλώ ξάνα εκτελέστε την εφαρμογή μας.",Toast.LENGTH_LONG).show();
-//                    finish();
-//                }
-//                return;
-//            }
-//            case 2:{
-//                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                    startActivity(new Intent(SplashActivity.this,MapsActivity.class));
-//                } else {
-//                    Toast.makeText(getApplicationContext(),"Η συγκεκριμένη εφαρμογή χρειάζεται να έχει πρόσβαση στην εγγραφή στην συσκευή σας." +
-//                            "\rΠαρακαλώ ξάνα εκτελέστε την εφαρμογή μας.",Toast.LENGTH_LONG).show();
-//                    finish();
-//                }
-//            }
-//            // other 'case' lines to check for other
-//            // permissions this app might request
-//        }
-//    }
 }

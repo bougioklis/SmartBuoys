@@ -31,7 +31,7 @@ public class LEDFragment extends Fragment {
     Switch led1, led2, led3,rgb1Switch,rgb2Switch,rgb3Switch;
     Button rgb1, rgb2, rgb3;
 
-    // h shmadoura pou epilex8ike
+    // which buoy was selected
     BuoyClass buoy;
 
     public LEDFragment() {
@@ -50,11 +50,11 @@ public class LEDFragment extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // arxikopoihsh tou antikeimenou
+        // global object initialization
         global = ((Global) getActivity().getApplicationContext());
         buoy = global.buoyList.get(global.markerClickIndex);
 
-        // vriskoume ta views
+        //views
         led1 = (Switch) view.findViewById(R.id.led1);
         led2 = (Switch) view.findViewById(R.id.led2);
         led3 = (Switch) view.findViewById(R.id.led3);
@@ -73,7 +73,7 @@ public class LEDFragment extends Fragment {
         led3.setChecked(buoy.isLed3());
 
 
-        //click listeners gia ta led kai update ston server
+        //click listeners for the leds switched and update the DB
         led1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,10 +96,10 @@ public class LEDFragment extends Fragment {
             }
         });
 
-        //elegxoume sthn bash an to rgb fwtaki einia off h exei kapoio xrwma!!
-        // an exei kapoio xrwma to 8etoume san background color sto antistoixo rgb button
-        // an einia off tote to kanoume disabled
-        //exoume ena switchaki to opoio mas epitrepei na anoiksoume kai na kleisoume ta fwta.
+        //check if  rgb is off or it has a value!!
+        //if if has a value we put that color on button background
+        //if rgb is off then we disable the button
+        //switch that allows to open or close the rgb
         if (!buoy.getRGB1().equals("off")) {
             rgb1.setBackgroundColor(Color.parseColor(buoy.getRGB1()));
             rgb1Switch.setText(getString(R.string.onLight));
@@ -125,18 +125,18 @@ public class LEDFragment extends Fragment {
             rgb3Switch.setText(getString(R.string.offLight));
         }
 
-        // on clicklisteners gia ta switches twn fwtwn
+        // on clicklisteners for rgb switched
         rgb1Switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(rgb1Switch.isChecked()){
-                    // an einai checked shmainei oti prepei na kanoume disabled to fws
+                    //if isChecked then we have to disable the light
                     rgb1.setBackgroundResource(android.R.drawable.btn_default);
                     rgb1Switch.setText(getString(R.string.offLight));
                     rgb1.setEnabled(false);
                     global.buoyList.get(global.markerClickIndex).setRGB1("off");
                 }else{
-                    //to anoigoume kanoume to koumpi clickable
+                    //else we enable the light and put white background
                     rgb1.setEnabled(true);
                     rgb1Switch.setText(getString(R.string.onLight));
                     global.buoyList.get(global.markerClickIndex).setRGB1("#ffffff");
@@ -149,13 +149,13 @@ public class LEDFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(rgb2Switch.isChecked()){
-                    // an einai checked shmainei oti prepei na kanoume disabled to fws
+                    //if isChecked then we have to disable the light
                     rgb2.setBackgroundResource(android.R.drawable.btn_default);
                     rgb2.setEnabled(false);
                     rgb2Switch.setText(getString(R.string.offLight));
                     global.buoyList.get(global.markerClickIndex).setRGB2("off");
                 }else{
-                    //to anoigoume kanoume to koumpi clickable
+                    //else we enable the light and put white background
                     rgb2.setEnabled(true);
                     rgb2Switch.setText(getString(R.string.onLight));
                     global.buoyList.get(global.markerClickIndex).setRGB2("#ffffff");
@@ -168,13 +168,13 @@ public class LEDFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(rgb3Switch.isChecked()){
-                    // an einai checked shmainei oti prepei na kanoume disabled to fws
+                    //if isChecked then we have to disable the light
                     rgb3.setBackgroundResource(android.R.drawable.btn_default);
                     rgb3.setEnabled(false);
                     rgb3Switch.setText(getString(R.string.offLight));
                     global.buoyList.get(global.markerClickIndex).setRGB3("off");
                 }else{
-                    //to anoigoume kanoume to koumpi clickable
+                    //else we enable the light and put white background
                     rgb3.setEnabled(true);
                     rgb3Switch.setText(getString(R.string.onLight));
                     global.buoyList.get(global.markerClickIndex).setRGB3("#ffffff");
@@ -217,32 +217,32 @@ public class LEDFragment extends Fragment {
             // Executes, when user click OK button
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
-//                Toast.makeText(getActivity().getApplicationContext(), "Selected Color : " + color, Toast.LENGTH_LONG).show();
-                // metatropi tou xrwmatos apo int se hex
+                // transform color from int to hex
                 String hexColor = String.format("#%06X", (0xFFFFFF & color));
                 switch (id){
                     case 1: {
-                        // allazoume to antikeimenos sthn lista maskai to background tou koumpiou
+                        // update buoy object and set button's background
                         global.buoyList.get(global.markerClickIndex).setRGB1(hexColor);
                         rgb1.setBackgroundColor(Color.parseColor(global.buoyList.get(global.markerClickIndex).getRGB1()));
                         break;
                     }
                     case 2:{
-                        // allazoume to antikeimenos sthn lista maskai to background tou koumpiou
+                        // update buoy object and set button's background
                         global.buoyList.get(global.markerClickIndex).setRGB2(hexColor);
                         rgb2.setBackgroundColor(Color.parseColor(global.buoyList.get(global.markerClickIndex).getRGB2()));
                         break;
                     }
                     case 3:{
-                        // allazoume to antikeimenos sthn lista maskai to background tou koumpiou
+                        // update buoy object and set button's background
                         global.buoyList.get(global.markerClickIndex).setRGB3(hexColor);
-                        rgb1.setBackgroundColor(Color.parseColor(global.buoyList.get(global.markerClickIndex).getRGB3()));
+                        rgb3.setBackgroundColor(Color.parseColor(global.buoyList.get(global.markerClickIndex).getRGB3()));
                         break;
                     }
                 }
             }
         });
         dialog.show();
+        //update on server
         updateBuoy();
     }
 
@@ -254,7 +254,7 @@ public class LEDFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    //kanoume update apo ton server
+                   //update on DB
                     result[0] = global.updateBuoys(global.buoyList.get(global.markerClickIndex));
                 } catch (Exception e) {
                     Log.i("Thread Exce", e.toString());
@@ -269,10 +269,10 @@ public class LEDFragment extends Fragment {
                                 global.flagIOException= false;
                             }
                             if (result[0].equals("-1")){
-                                //exception apo ton server
+                                //server error
                                 Toast.makeText(global.context, R.string.serverError, Toast.LENGTH_LONG).show();
                             }else {
-                                //epituxws updated
+                                //updated successfully
                                 Toast.makeText(global.context, R.string.updateSuccessful, Toast.LENGTH_LONG).show();
                             }
                         }

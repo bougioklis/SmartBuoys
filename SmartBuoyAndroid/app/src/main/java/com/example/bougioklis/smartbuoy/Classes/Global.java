@@ -32,31 +32,29 @@ import java.util.List;
 
 public class Global extends Application {
 
-    //metablites gia thn ip
+    //ip variables
     public String selectAllURL, updateURL, MQTTURL,navigationUrl;
 
-    // h topo8esia tou user
+    //user location
     public double latitude, longitude;
 
-    // lista me tis simadoures
+    //Buoy's list
     public List<BuoyClass> buoyList;
 
-    // o marker pou pataei o index apo to items tou marker antistoixei sthn idia shmadoura me auth apo to buoyList
+    //variable to know which buoy user has clicked.
     public int markerClickIndex;
 
-    //boh8itikes  metavlites gia mesa sta fragment
+    //application context and act
     public Activity activity;
     public Context context;
 
-    //an ginei kapoio IOException
+    //for IOException
     public boolean flagIOException = false;
 
     //flag to keep if list has changed
     public boolean hasBuoyBeenUpdated = false;
 
-
-
-    //sunarthsh gia update twn shmadourwn
+    //function to update buoy on DB
     public String updateBuoys(BuoyClass buoy) {
 
         String updateB = updateURL;
@@ -134,14 +132,14 @@ public class Global extends Application {
         return null;
     }
 
-    // sunartisi gia download twn shmadourwn
+    // function to download buoys from DB
     public List<BuoyClass> downloadBuoys() {
         List<BuoyClass> listWithBuoys = new ArrayList<>();
 
         String urL = selectAllURL;
 
         try {
-            //ekteloume http request
+            //http request
             URL url = new URL(urL);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
@@ -149,17 +147,18 @@ public class Global extends Application {
 
             InputStream inputstream = httpURLConnection.getInputStream();
 
-            //metatropi se string builder to response
+            //response to stringBuilder
             StringBuilder result = inputToString(inputstream);
             Log.i("response", result.toString());
 
-            // to response einai se json morfi
+            // response is on json
             JSONObject jsonResponse = new JSONObject(result.toString());
             JSONArray jsonMainNode = jsonResponse.optJSONArray("buoy");
 
-            // boh8itikes metablites
+            //Helpers
             String id, latitude, longitude, orientation, led1, led2, led3, rgb1, rgb2, rgb3, targetLat, targetLng, hover, camera;
-//json parsing
+
+            //json parsing
             for (int i = 0; i < jsonMainNode.length(); i++) {
                 JSONArray jsonArray = jsonMainNode.getJSONArray(i);
                 id = jsonArray.getString(0);
@@ -177,14 +176,14 @@ public class Global extends Application {
                 hover = jsonArray.getString(12);
                 camera = jsonArray.getString(13);
 
-                // populate thn lista me tis simadoures
+                // populate Buoy's list
                 listWithBuoys.add(new BuoyClass(Integer.parseInt(id), Integer.parseInt(orientation), Double.parseDouble(latitude),
                         Double.parseDouble(longitude), Double.parseDouble(targetLat), Double.parseDouble(targetLng),
                         stringToBoolean(led1), stringToBoolean(led2), stringToBoolean(led3),
                         stringToBoolean(hover), stringToBoolean(camera), rgb1, rgb2, rgb3, getApplicationContext()));
             }
 
-            // lista me tis simadoures
+
             return listWithBuoys;
 
         } catch (ProtocolException e) {
@@ -200,7 +199,7 @@ public class Global extends Application {
         return null;
     }
 
-    // metatroph tou response se StringBuilder
+    // response from server to StringBuilder
     private StringBuilder inputToString(InputStream input) {
         String line;
 
@@ -217,7 +216,7 @@ public class Global extends Application {
         return answer;
     }
 
-    // sunarthsh gia na metatrepei ta 0-1 apo string se true h false
+
     private boolean stringToBoolean(String word) {
         if (word.equals("0")) {
             return false;
@@ -226,14 +225,14 @@ public class Global extends Application {
     }
 
 
-    // sunartisi gia download twn shmadourwn
+    // function to download buoys from service
     public List<BuoyClass> downloadBuoysFromService() {
         List<BuoyClass> listWithBuoys = new ArrayList<>();
 
         String urL = selectAllURL;
 
         try {
-            //ekteloume http request
+            //http request
             URL url = new URL(urL);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
@@ -241,17 +240,18 @@ public class Global extends Application {
 
             InputStream inputstream = httpURLConnection.getInputStream();
 
-            //metatropi se string builder to response
+            //response to stringbuilder
             StringBuilder result = inputToString(inputstream);
             Log.i("response", result.toString());
 
-            // to response einai se json morfi
+            //response is on json
             JSONObject jsonResponse = new JSONObject(result.toString());
             JSONArray jsonMainNode = jsonResponse.optJSONArray("buoy");
 
-            // boh8itikes metablites
+            // helpers
             String id, latitude, longitude, orientation, led1, led2, led3, rgb1, rgb2, rgb3, targetLat, targetLng, hover, camera;
-//json parsing
+
+            //json parsing
             for (int i = 0; i < jsonMainNode.length(); i++) {
                 JSONArray jsonArray = jsonMainNode.getJSONArray(i);
                 id = jsonArray.getString(0);
@@ -269,15 +269,15 @@ public class Global extends Application {
                 hover = jsonArray.getString(12);
                 camera = jsonArray.getString(13);
 
-                // populate thn lista me tis simadoures
                 listWithBuoys.add(new BuoyClass(Integer.parseInt(id), Integer.parseInt(orientation), Double.parseDouble(latitude),
                         Double.parseDouble(longitude), Double.parseDouble(targetLat), Double.parseDouble(targetLng),
                         stringToBoolean(led1), stringToBoolean(led2), stringToBoolean(led3),
                         stringToBoolean(hover), stringToBoolean(camera), rgb1, rgb2, rgb3, getApplicationContext()));
             }
 
+            //flag to check if buoy list is updated
             hasBuoyBeenUpdated=true;
-            // lista me tis simadoures
+
             return listWithBuoys;
 
         } catch (ProtocolException e) {
@@ -293,7 +293,7 @@ public class Global extends Application {
         return null;
     }
 
-    //sunarthsh gia update twn shmadourwn
+    //function to update targetcoordinates
     public String updateBuoyNavigation(BuoyClass buoy) {
 
         String updateB = navigationUrl;

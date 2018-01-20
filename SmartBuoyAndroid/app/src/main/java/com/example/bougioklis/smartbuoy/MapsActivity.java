@@ -6,8 +6,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +14,7 @@ import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.Fragments.FragmentDialog;
 import com.example.bougioklis.smartbuoy.MenuOptions.AboutUsActivity;
-import com.example.bougioklis.smartbuoy.MenuOptions.SettingsAtivity;
+import com.example.bougioklis.smartbuoy.MenuOptions.SettingsActivity;
 import com.example.bougioklis.smartbuoy.MenuOptions.TutorialActivity;
 import com.example.bougioklis.smartbuoy.Service.DownloadService;
 
@@ -38,7 +36,7 @@ import java.util.TimerTask;
 // TODO: 01-Nov-17  ana posh wra na katevazei ksana apo ton server? 
 public class MapsActivity extends AppCompatActivity {
 
-    // h lista mas 8a exei stis prwtes 8eseis tis simadoures kai sthn teleutaia marker me thn topo8esia tou user
+    // list with markers on the last position it has the user coor
     private List<OverlayItem> items = new ArrayList<>();
     private Global global;
 
@@ -64,7 +62,8 @@ public class MapsActivity extends AppCompatActivity {
         startService(serviceIntent);
 
         GPS gps = new GPS(getApplicationContext());
-//pernoume tis suntetagmenes tou user
+
+        //user coor
         global.latitude = gps.getLatitude();
         global.longitude = gps.getLongitude();
 
@@ -74,14 +73,16 @@ public class MapsActivity extends AppCompatActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         try {
-            //dhmiourgoume markers me tis shmadoures
+            //list with markers
             for (int i = 0; i < global.buoyList.size(); i++) {
                 items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
                 Drawable marker = global.buoyList.get(i).getMarkerIcon();
                 items.get(items.size() - 1).setMarker(marker);
             }
         }catch (NullPointerException e){
-            startActivity(new Intent(MapsActivity.this,SettingsAtivity.class).putExtra("id","SplashActivity"));
+            // if we have a NullPointerException that means we have a wrong ip so we
+            // could not download the buoys. Go to SettingActivity and put the unique id so after the user has finished go again to splashActivity
+            startActivity(new Intent(MapsActivity.this,SettingsActivity.class).putExtra("id","SplashActivity"));
             finish();
         }
 
@@ -134,6 +135,7 @@ public class MapsActivity extends AppCompatActivity {
         initializeTimerTask();
 
         //schedule the timer, to wake up every 15 seconds
+        // to update the list with the buoys
         timer.schedule(timerTask, 15000, 15000);
 
     }
@@ -145,11 +147,13 @@ public class MapsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(global.hasBuoyBeenUpdated) {
-                            Log.i("MapsAct", "Timer");
+
+                            // if Buoys list has been updated then  change the flag and
                             global.hasBuoyBeenUpdated=false;
+
+                            //clear the list
                             items.clear();
 
-                            Log.i("Buoy2 is on ",global.buoyList.size()+" ");
 
                             for (int i = 0; i < global.buoyList.size(); i++) {
                                 items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
@@ -203,11 +207,12 @@ public class MapsActivity extends AppCompatActivity {
         return true;
     }
 
+    // put option menu
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.settings:
-                startActivity(new Intent(this, SettingsAtivity.class));
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.tutorial:
                 startActivity(new Intent(this, TutorialActivity.class));

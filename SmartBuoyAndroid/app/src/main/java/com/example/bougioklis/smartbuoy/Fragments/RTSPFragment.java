@@ -28,21 +28,9 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class RTSPFragment extends Fragment{
-    // TODO: 05-Nov-17 edw an o xrhsths er8ei se auto to fragment kai kanei swipe back tote sunexizei na paizei to
-    // TODO: 05-Nov-17 videaki!! kai feugei apo to focus alla fainetai sthn o8onh!!
-    // TODO: 05-Nov-17 an valoume koumpi kai anoigei ena alla activity 8a paizei kanonika!!!
+
     Global global;
     Button showStream;
-//    BuoyClass buoy;
-//
-//    final static String USERNAME = "admin";
-//    final static String PASSWORD = "camera";
-//    final static String RTSP_URL = "rtsp://10.0.1.7:554/play1.sdp";
-//    final static String RTSP_URL_TEST ="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov";
-//
-//    private MediaPlayer mediaPlayer;
-//    private SurfaceHolder surfaceHolder;
-//    SurfaceView surfaceView;
 
     public RTSPFragment() {
         // Required empty public constructor
@@ -61,7 +49,7 @@ public class RTSPFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         global = ((Global) getActivity().getApplicationContext());
 
-        //aplo intent se kainourgio activity
+        //intent to rtspAct
         showStream = (Button) view.findViewById(R.id.showStream);
         showStream.setOnClickListener(new View.OnClickListener() {
             @Override

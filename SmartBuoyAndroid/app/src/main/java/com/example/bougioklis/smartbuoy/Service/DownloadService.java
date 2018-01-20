@@ -16,6 +16,8 @@ import java.util.TimerTask;
 
 /**
  * Created by Bougioklis on 11-Jan-18.
+ *
+ * Background service which  every 30 seconds it download the Buoys
  */
 
 public class DownloadService extends Service {
@@ -64,6 +66,7 @@ public class DownloadService extends Service {
         initializeTimerTask();
 
         //schedule the timer, to wake up every 30 seconds
+        // every 30 secs download from DB
         timer.schedule(timerTask, 30000, 30000);
     }
 
@@ -75,7 +78,9 @@ public class DownloadService extends Service {
                     @Override
                     public void run() {
                         try {
+                            // we clear the buoyList
                             global.buoyList.clear();
+                            // we redownload the Buoys
                             global.buoyList=global.downloadBuoysFromService();
                         } catch (Exception e) {
                             Log.i("Thread ex", e.toString());
