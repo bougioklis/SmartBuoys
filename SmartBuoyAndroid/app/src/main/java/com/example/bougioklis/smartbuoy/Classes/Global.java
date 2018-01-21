@@ -200,7 +200,7 @@ public class Global extends Application {
     }
 
     // response from server to StringBuilder
-    private StringBuilder inputToString(InputStream input) {
+    public StringBuilder inputToString(InputStream input) {
         String line;
 
         StringBuilder answer = new StringBuilder();

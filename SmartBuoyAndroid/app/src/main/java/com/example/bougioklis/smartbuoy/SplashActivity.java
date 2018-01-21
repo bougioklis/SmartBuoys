@@ -1,10 +1,13 @@
 package com.example.bougioklis.smartbuoy;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +24,10 @@ import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.MenuOptions.SettingsActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,12 +67,24 @@ public class SplashActivity extends AppCompatActivity {
 
         Log.i("serverIP IF",(server_ip==null) +"");
 
+        if( !isNetworkAvailable()){
+            Toast.makeText(getApplicationContext(),"Παρακαλώ συνδεθείται στο δίκτυο!",Toast.LENGTH_LONG).show();
+            finish();
+        }
+
         if (server_ip!= null) {
         //if ip is saved on shared preference initialize the url vars
             global.selectAllURL = "http://" + server_ip + "/WebServer/SelectAllBuoys.php";
             global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
             global.navigationUrl = "http://"+server_ip+"/WebServer/NavigationBuoy.php";
             global.MQTTURL = "tcp://" + server_ip + ":1883";
+            if(!checkIfDeviceIsConnectedToCorrectNetwork(server_ip)){
+                // intent on Settings Activity to change the ip
+                Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
+                //unique id to know from which activity we went on settings activity
+                intent.putExtra("id","SplashActivity");
+                startActivity(intent);
+            }
         } else {
             // intent on Settings Activity to change the ip
             Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
@@ -241,4 +260,35 @@ public class SplashActivity extends AppCompatActivity {
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
+
+    //function to check if the given ip from sharedpreferences is correct
+    private boolean checkIfDeviceIsConnectedToCorrectNetwork(String ip){
+        if (isNetworkAvailable()) {
+            try {
+                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://" + ip + "/WebServer/checkConnection.php").openConnection());
+                urlc.setConnectTimeout(1500);
+                urlc.setDoInput(true);
+                urlc.connect();
+
+
+                InputStream inputstream = urlc.getInputStream();
+                StringBuilder result = global.inputToString(inputstream);
+                return (result.toString().equals("200"));
+            } catch (IOException e) {
+                Log.i("Error checking connec", e.toString());
+            }
+        } else {
+            Log.i("No network available!","sorry");
+        }
+        return false;
+    }
+
 }
