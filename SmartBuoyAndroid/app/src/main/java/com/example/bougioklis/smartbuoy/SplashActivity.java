@@ -78,13 +78,13 @@ public class SplashActivity extends AppCompatActivity {
             global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
             global.navigationUrl = "http://"+server_ip+"/WebServer/NavigationBuoy.php";
             global.MQTTURL = "tcp://" + server_ip + ":1883";
-            if(!checkIfDeviceIsConnectedToCorrectNetwork(server_ip)){
-                // intent on Settings Activity to change the ip
-                Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
-                //unique id to know from which activity we went on settings activity
-                intent.putExtra("id","SplashActivity");
-                startActivity(intent);
-            }
+//            if(!checkIfDeviceIsConnectedToCorrectNetwork(server_ip)){
+//                // intent on Settings Activity to change the ip
+//                Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
+//                //unique id to know from which activity we went on settings activity
+//                intent.putExtra("id","SplashActivity");
+//                startActivity(intent);
+//            }
         } else {
             // intent on Settings Activity to change the ip
             Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
@@ -270,25 +270,30 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     //function to check if the given ip from sharedpreferences is correct
-    private boolean checkIfDeviceIsConnectedToCorrectNetwork(String ip){
-        if (isNetworkAvailable()) {
-            try {
-                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://" + ip + "/WebServer/checkConnection.php").openConnection());
-                urlc.setConnectTimeout(1500);
-                urlc.setDoInput(true);
-                urlc.connect();
-
-
-                InputStream inputstream = urlc.getInputStream();
-                StringBuilder result = global.inputToString(inputstream);
-                return (result.toString().equals("200"));
-            } catch (IOException e) {
-                Log.i("Error checking connec", e.toString());
-            }
-        } else {
-            Log.i("No network available!","sorry");
-        }
-        return false;
-    }
+//    private boolean checkIfDeviceIsConnectedToCorrectNetwork(final String ip){
+//        if (isNetworkAvailable()) {
+//            final String[] res = new String[1];
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        HttpURLConnection urlc = (HttpURLConnection) (new URL("http://" + ip + "/WebServer/checkConnection.php").openConnection());
+//                        urlc.setConnectTimeout(1500);
+//                        urlc.setDoInput(true);
+//                        urlc.connect();
+//
+//
+//                        InputStream inputstream = urlc.getInputStream();
+//                        StringBuilder result = global.inputToString(inputstream);
+//                        res[0] = result.toString();
+//                    } catch (IOException e) {
+//                        Log.i("Error checking connec", e.toString());
+//                    }
+//                }
+//            }).start();
+//            return res[0].equals("200");
+//        }
+//        return false;
+//    }
 
 }
