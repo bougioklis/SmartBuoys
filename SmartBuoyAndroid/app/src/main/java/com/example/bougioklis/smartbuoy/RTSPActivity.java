@@ -81,6 +81,8 @@ public class RTSPActivity extends AppCompatActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
+
+
         //XML Views
         global = ((Global) getApplicationContext());
         throttle = (SeekBar) findViewById(R.id.throttle);

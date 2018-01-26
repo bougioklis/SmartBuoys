@@ -1,5 +1,5 @@
 Arduino:
-
+* EEPROM
 
 
 Webserver:
@@ -9,12 +9,6 @@ Webserver:
 
 Android:
 * on open close camera flag  mediaPlayer.release on RTSPActivity on line 265  crashes
-* check if connection on internet (check if is working correctly??)
 * seekbars sta8era shmeia 0,45,90,135,180 kai na fainontai
-* an den einai sundedemeno sto wifi h la8os ip mnm oxi na crasharei
 
 
-feedback 
-
-* megalutera koumpia genika!!
-*

@@ -1,13 +1,4 @@
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="vertical">-->
 
-
-<!--<SurfaceView--><!--android:id="@+id/surfaceView"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent" />-->
-
-
-<!--<io.github.controlwear.virtual.joystick.android.JoystickView xmlns:custom="http://schemas.android.com/apk/res-auto"--><!--android:id="@+id/joystick"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--custom:JV_backgroundColor="#009688"--><!--custom:JV_backgroundSizeRatio="50%"--><!--custom:JV_borderColor="#00796B"--><!--custom:JV_borderWidth="4dp"--><!--custom:JV_buttonColor="#FF6E40"--><!--custom:JV_buttonSizeRatio="15%"--><!--custom:JV_fixedCenter="false" />-->
-
-
-<!--</RelativeLayout>-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -46,12 +37,13 @@
             android:layout_height="wrap_content"
             android:text="Camera flag"
             android:textColor="@color/black"
-            android:textSize="18sp"/>
+            android:textSize="25sp"/>
         <Button
             android:id="@+id/stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Stop Buoy"
+            android:textSize="25sp"
             android:layout_below="@+id/cameraSwitch"
             android:paddingTop="5dp"/>
 
@@ -68,7 +60,7 @@
             android:layout_height="wrap_content"
             android:text="@string/throttle"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="25sp"
             android:layout_centerVertical="true"
             android:paddingBottom="35dp"/>
 
@@ -85,7 +77,7 @@
             android:layout_height="wrap_content"
             android:text="@string/steering"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="25sp"
             android:layout_alignParentBottom="true"/>
 
 

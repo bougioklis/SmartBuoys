@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ipfill"
-        android:textSize="18sp"
+        android:textSize="25sp"
         android:textColor="@color/black"/>
     <EditText
         android:id="@+id/ip"
@@ -33,7 +33,7 @@
         android:layout_below="@+id/ip"
         android:paddingTop="15dp"
         android:text="@string/rtspip"
-        android:textSize="18sp"
+        android:textSize="25sp"
         android:textColor="@color/black"/>
     <EditText
         android:id="@+id/rtsp"
