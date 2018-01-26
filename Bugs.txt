@@ -9,6 +9,5 @@ Webserver:
 
 Android:
 * on open close camera flag  mediaPlayer.release on RTSPActivity on line 265  crashes
-* seekbars sta8era shmeia 0,45,90,135,180 kai na fainontai
 
 

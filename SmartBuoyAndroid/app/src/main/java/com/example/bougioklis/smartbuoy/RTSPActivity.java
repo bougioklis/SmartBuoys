@@ -1,6 +1,12 @@
 package com.example.bougioklis.smartbuoy;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -150,7 +156,28 @@ public class RTSPActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                // round to 0 ,45,90,135,180
+                if ((progressSterring[0] >= 0 && progressSterring[0] < 45) && progressSterring[0] < 23 )
+                    progressSterring[0] = 0 ;
+                else if ((progressSterring[0] > 0 && progressSterring[0] <= 45) && progressSterring[0] >= 23)
+                    progressSterring[0] = 45 ;
+                else if ((progressSterring[0] > 45 && progressSterring[0] < 90) && progressSterring[0] < 68)
+                    progressSterring[0] = 45 ;
+                else if ((progressSterring[0] > 45 && progressSterring[0] <= 90) && progressSterring[0] >= 68)
+                    progressSterring[0] = 90 ;
+                else if ((progressSterring[0] > 90 && progressSterring[0] < 135) && progressSterring[0] < 113)
+                    progressSterring[0] = 90;
+                else if ((progressSterring[0] > 90 && progressSterring[0] <= 135) && progressSterring[0] >= 113)
+                    progressSterring[0] = 135;
+                else if ((progressSterring[0] > 135 && progressSterring[0] < 180) && progressSterring[0] < 158)
+                    progressSterring[0] = 135;
+                else if ((progressSterring[0] > 135 && progressSterring[0] <= 180) && progressSterring[0] >= 158)
+                    progressSterring[0] = 180;
+
+
+
                 //same as throttle SeekBar
+                steering.setProgress(progressSterring[0]);
                 steeringTV.setText(getApplicationContext().getString(R.string.steering)+": "+progressSterring[0]);
                 global.buoyList.get(global.markerClickIndex).setSteering(progressSterring[0]);
                 mqttHelper.connect(buoy.getDriveTopicID());
