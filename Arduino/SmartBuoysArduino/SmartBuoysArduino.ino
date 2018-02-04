@@ -26,7 +26,7 @@ byte mac[] = {
 
 // Available IP address on  network here,
 // for manual configuration:
-IPAddress ip(192, 168, 0, 3);
+IPAddress ip(192, 168, 1, 3);
 
 // fill in your Domain Name Server address here:
 IPAddress myDns(1, 1, 1, 1);
@@ -38,7 +38,7 @@ EthernetClient Etheclient;
 Servo servoMotor; 
 
 //MQTT server and port
-const char* mqttServer = "192.168.0.71";
+const char* mqttServer = "192.168.1.6";
 const int mqttPort = 1883;
 
 //MQTT client
@@ -72,7 +72,7 @@ boolean finishedParsing=false;
 boolean isAutoDriving =false;
 
 unsigned long previousMillis = 0; // last time latitude,longtitude and orientation was send to server
-long interval = 10000; // send LatLng and orientation to server every 10seconds
+//long interval = 10000; // send LatLng and orientation to server every 10seconds
 
 
 void setup() {
@@ -155,7 +155,7 @@ void loop() {
   //current timestamp
   unsigned long currentMillis = millis();
 
-  if(currentMillis - previousMillis > interval) {
+  if(currentMillis - previousMillis > 10000/*interval*/) {
     previousMillis = currentMillis;  
     updateServerLatLngOrientation();
   }
@@ -178,8 +178,14 @@ void loop() {
     isAutoDriving =true;
   }
 
-  if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <10 && isAutoDriving){
+  if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <=10 && isAutoDriving){
     stopMoving();
     isAutoDriving=false;
   }
+
+  if(Buoy.hover == 1 && calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) > 10 ){
+    AutoDriveBuoy;
+    isAutoDriving=true;
+  }
+  
 }

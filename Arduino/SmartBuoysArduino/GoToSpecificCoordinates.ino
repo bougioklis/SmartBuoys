@@ -7,7 +7,6 @@ void AutoDriveBuoy(){
   else{
     get_direction(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng);
 //    forward();
-
  } 
 }
 
@@ -96,7 +95,7 @@ void stopMoving(){
 void forward(){
 
    delay(100);
-  Serial.println("FORWARD ??????");
+   Serial.println("FORWARD ??????");
    digitalWrite( MOTOR_B_DIR, LOW );
    digitalWrite( MOTOR_B_PWM, LOW );
 
