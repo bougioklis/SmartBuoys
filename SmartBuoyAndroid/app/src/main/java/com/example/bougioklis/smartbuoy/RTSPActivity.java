@@ -21,6 +21,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -87,15 +88,18 @@ public class RTSPActivity extends AppCompatActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-
+        global = ((Global) getApplicationContext());
+        buoy = global.buoyList.get(global.markerClickIndex);
 
         //XML Views
-        global = ((Global) getApplicationContext());
         throttle = (SeekBar) findViewById(R.id.throttle);
         throttleTV = (TextView) findViewById(R.id.throttleTextView);
         steering = (SeekBar) findViewById(R.id.steering);
         steeringTV = (TextView) findViewById(R.id.steeringTextView);
         stopButton = (Button) findViewById(R.id.stop);
+
+        final int[] progressThrottle = new int[1];
+        final int[] progressSterring = new int[1];
 
         //onClick stop the buoy
         stopButton.setOnClickListener(new View.OnClickListener() {
@@ -103,11 +107,26 @@ public class RTSPActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mqttHelper.connect(buoy.getDriveTopicID());
                 mqttHelper.publishMessage(buoy.getDriveTopicID(),"Throttle:0///Steering:90");
+
+                //we have to reset our seekbars
+
+                //set progressThrottle & progressSterring vars
+                global.buoyList.get(global.markerClickIndex).setThrottle(0);
+                global.buoyList.get(global.markerClickIndex).setSteering(90);
+
+                progressSterring[0] = 90;
+                progressThrottle[0] = 0;
+
+                throttleTV.setText(getString(R.string.throttle)+" : "+global.buoyList.get(global.markerClickIndex).getThrottle()+"");
+                throttle.setProgress(progressThrottle[0]);
+
+                steeringTV.setText(getString(R.string.steering)+" : "+global.buoyList.get(global.markerClickIndex).getSteering()+"");
+                steering.setProgress(progressSterring[0]);
+
             }
         });
 
-        final int[] progressThrottle = new int[1];
-        final int[] progressSterring = new int[1];
+
 
         // show the throttle to user
         throttle.setProgress(global.buoyList.get(global.markerClickIndex).getThrottle());
@@ -188,9 +207,6 @@ public class RTSPActivity extends AppCompatActivity {
 
         surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 
-
-        buoy = global.buoyList.get(global.markerClickIndex);
-
         startMqtt();
 
         //add two markers on the map one for the user and one for the buoy
@@ -223,10 +239,11 @@ public class RTSPActivity extends AppCompatActivity {
 
         map.getOverlays().add(mOverlay);
 
-        GeoPoint buoyPoint = new GeoPoint(buoy.getLat(), buoy.getLng());
+        final GeoPoint buoyPoint = new GeoPoint(buoy.getLat(), buoy.getLng());
         mapController.setCenter(buoyPoint);
 
         if (buoy.isCameraflag()){
+            mediaPlayer = new MediaPlayer();
             showRtspStream();
         }
 
@@ -234,22 +251,47 @@ public class RTSPActivity extends AppCompatActivity {
 
         cameraSwitch.setChecked(buoy.isCameraflag());
 
-        cameraSwitch.setOnClickListener(new View.OnClickListener() {
+        cameraSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                //modify the list and update DB
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //changing the list and updating our DB
                 global.buoyList.get(global.markerClickIndex).setCameraflag(!buoy.isCameraflag());
                 updateBuoy();
-                if (global.buoyList.get(global.markerClickIndex).isCameraflag()) {
-                    //we show rtsp stream
+
+                if(isChecked){
+                    //the camera switch now is on
+                    // we show the rtsp stream
+                    mediaPlayer = new MediaPlayer();
+
                     showRtspStream();
-                } else {
-                    //we pause the camera
-                    mediaPlayer.pause();
-//                    mediaPlayer.release();
+
+                }else{
+                    //the camera switch is off
+                    // we pause??
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer=null;
                 }
+
+
             }
         });
+//        cameraSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //modify the list and update DB
+//                global.buoyList.get(global.markerClickIndex).setCameraflag(!buoy.isCameraflag());
+//                updateBuoy();
+//                if (global.buoyList.get(global.markerClickIndex).isCameraflag()) {
+//                    //we show rtsp stream
+//                    showRtspStream();
+//                } else {
+//                    //we pause the camera
+//                    mediaPlayer.pause();
+////                    mediaPlayer.release();
+//                }
+//            }
+//        });
     }
 
     public void showRtspStream(){
@@ -258,7 +300,6 @@ public class RTSPActivity extends AppCompatActivity {
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDisplay(surfaceHolder);
 
                 Context context = global.activity.getApplicationContext();
@@ -288,7 +329,8 @@ public class RTSPActivity extends AppCompatActivity {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                mediaPlayer.release();
+                if (global.buoyList.get(global.markerClickIndex).isCameraflag())
+                    mediaPlayer.release();
 
             }
         });

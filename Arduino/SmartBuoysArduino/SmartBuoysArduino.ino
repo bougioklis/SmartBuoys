@@ -168,12 +168,11 @@ void loop() {
   manageLEDS();
   getHeading();
 
-  if((Buoy.steering !=0 || Buoy.throttle!=0) && !isAutoDriving){
+  if(!isAutoDriving){
       driveBuoy();
   }
-//Serial.println((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) <0.010));
+  
   if((Buoy.latitude!= Buoy.TargetLat || Buoy.longitude != Buoy.TargetLng) && finishedParsing && (calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) >10) ){
-//  Serial.println("MPIKE??");
     AutoDriveBuoy();    
     isAutoDriving =true;
   }

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -97,91 +98,150 @@ public class LEDFragment extends Fragment {
         });
 
         //check if  rgb is off or it has a value!!
-        //if if has a value we put that color on button background
+        //if it has a value we put that color on button background
         //if rgb is off then we disable the button
         //switch that allows to open or close the rgb
-        if (!buoy.getRGB1().equals("off")) {
-            rgb1.setBackgroundColor(Color.parseColor(buoy.getRGB1()));
-            rgb1Switch.setText(getString(R.string.onLight));
-        }else{
-            rgb1.setEnabled(false);
-            rgb1Switch.setChecked(true);
+        if(buoy.getRGB1().equals("off")){
+            rgb1Switch.setChecked(false);
             rgb1Switch.setText(getString(R.string.offLight));
-        }
-        if (!buoy.getRGB2().equals("off")) {
-            rgb2.setBackgroundColor(Color.parseColor(buoy.getRGB2()));
-            rgb2Switch.setText(getString(R.string.onLight));
+            rgb1.setEnabled(false);
         }else{
-            rgb2.setEnabled(false);
-            rgb2Switch.setChecked(true);
-            rgb2Switch.setText(getString(R.string.offLight));
-        }
-        if (!buoy.getRGB3().equals("off")) {
-            rgb3.setBackgroundColor(Color.parseColor(buoy.getRGB3()));
-            rgb3Switch.setText(getString(R.string.onLight));
-        }else{
-            rgb3.setEnabled(false);
-            rgb3Switch.setChecked(true);
-            rgb3Switch.setText(getString(R.string.offLight));
+            rgb1.setBackgroundColor(Color.parseColor(buoy.getRGB1()));
+            rgb1Switch.setChecked(true);
+            rgb1Switch.setText(getString(R.string.onLight));
         }
 
-        // on clicklisteners for rgb switched
-        rgb1Switch.setOnClickListener(new View.OnClickListener() {
+        rgb1Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if(rgb1Switch.isChecked()){
-                    //if isChecked then we have to disable the light
-                    rgb1.setBackgroundResource(android.R.drawable.btn_default);
-                    rgb1Switch.setText(getString(R.string.offLight));
-                    rgb1.setEnabled(false);
-                    global.buoyList.get(global.markerClickIndex).setRGB1("off");
-                }else{
-                    //else we enable the light and put white background
-                    rgb1.setEnabled(true);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    // we have changed the rgb from off to on
+                    //change rgb1switch text
                     rgb1Switch.setText(getString(R.string.onLight));
+
+                    //enable the button
+                    rgb1.setEnabled(true);
+
+                    //we initialize the button on white
                     global.buoyList.get(global.markerClickIndex).setRGB1("#ffffff");
+                    //update the buoy object inside this fragment
+
+                    buoy= null;
+                    buoy= global.buoyList.get(global.markerClickIndex);
+
+                    rgb1.setBackgroundColor(Color.parseColor(buoy.getRGB1()));
+
+
+                }else{
+                    // we have changed the rgb from on to off
+                    //change rgb1switch text
+                    rgb1Switch.setText(getString(R.string.offLight));
+
+                    //disable the button
+                    rgb1.setEnabled(false);
+
+                    global.buoyList.get(global.markerClickIndex).setRGB1("off");
+                    rgb1.setBackgroundResource(android.R.drawable.btn_default);
+
                 }
                 updateBuoy();
             }
         });
 
-        rgb2Switch.setOnClickListener(new View.OnClickListener() {
+
+        if(buoy.getRGB2().equals("off")){
+            rgb2Switch.setChecked(false);
+            rgb2Switch.setText(getString(R.string.offLight));
+            rgb2.setEnabled(false);
+        }else{
+            rgb2.setBackgroundColor(Color.parseColor(buoy.getRGB2()));
+            rgb2Switch.setChecked(true);
+            rgb2Switch.setText(getString(R.string.onLight));
+        }
+
+        rgb2Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if(rgb2Switch.isChecked()){
-                    //if isChecked then we have to disable the light
-                    rgb2.setBackgroundResource(android.R.drawable.btn_default);
-                    rgb2.setEnabled(false);
-                    rgb2Switch.setText(getString(R.string.offLight));
-                    global.buoyList.get(global.markerClickIndex).setRGB2("off");
-                }else{
-                    //else we enable the light and put white background
-                    rgb2.setEnabled(true);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    // we have changed the rgb from off to on
+                    //change rgb1switch text
                     rgb2Switch.setText(getString(R.string.onLight));
+
+                    //enable the button
+                    rgb2.setEnabled(true);
+
+                    //we initialize the button on white
                     global.buoyList.get(global.markerClickIndex).setRGB2("#ffffff");
+
+                    //update the buoy object inside this fragment
+
+                    buoy= null;
+                    buoy= global.buoyList.get(global.markerClickIndex);
+
+                    rgb2.setBackgroundColor(Color.parseColor(buoy.getRGB2()));
+
+                }else{
+                    // we have changed the rgb from on to off
+                    //change rgb1switch text
+                    rgb2Switch.setText(getString(R.string.offLight));
+
+                    //disable the button
+                    rgb2.setEnabled(false);
+
+                    global.buoyList.get(global.markerClickIndex).setRGB2("off");
+                    rgb2.setBackgroundResource(android.R.drawable.btn_default);
+
                 }
                 updateBuoy();
             }
         });
 
-        rgb3Switch.setOnClickListener(new View.OnClickListener() {
+
+        if(buoy.getRGB3().equals("off")){
+            rgb3Switch.setChecked(false);
+            rgb3Switch.setText(getString(R.string.offLight));
+            rgb3.setEnabled(false);
+        }else{
+            rgb3.setBackgroundColor(Color.parseColor(buoy.getRGB3()));
+            rgb3Switch.setChecked(true);
+            rgb3Switch.setText(getString(R.string.onLight));
+        }
+
+        rgb3Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if(rgb3Switch.isChecked()){
-                    //if isChecked then we have to disable the light
-                    rgb3.setBackgroundResource(android.R.drawable.btn_default);
-                    rgb3.setEnabled(false);
-                    rgb3Switch.setText(getString(R.string.offLight));
-                    global.buoyList.get(global.markerClickIndex).setRGB3("off");
-                }else{
-                    //else we enable the light and put white background
-                    rgb3.setEnabled(true);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    // we have changed the rgb from off to on
+                    //change rgb1switch text
                     rgb3Switch.setText(getString(R.string.onLight));
+
+                    //enable the button
+                    rgb3.setEnabled(true);
+
+                    //we initialize the button on white
                     global.buoyList.get(global.markerClickIndex).setRGB3("#ffffff");
+
+                    //update the buoy object inside this fragment
+
+                    buoy= null;
+                    buoy= global.buoyList.get(global.markerClickIndex);
+
+                    rgb3.setBackgroundColor(Color.parseColor(buoy.getRGB3()));
+                }else{
+                    // we have changed the rgb from on to off
+                    //change rgb1switch text
+                    rgb3Switch.setText(getString(R.string.offLight));
+
+                    //disable the button
+                    rgb3.setEnabled(false);
+
+                    global.buoyList.get(global.markerClickIndex).setRGB3("off");
+                    rgb3.setBackgroundResource(android.R.drawable.btn_default);
                 }
                 updateBuoy();
             }
         });
+
 
         rgb1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,18 +284,24 @@ public class LEDFragment extends Fragment {
                         // update buoy object and set button's background
                         global.buoyList.get(global.markerClickIndex).setRGB1(hexColor);
                         rgb1.setBackgroundColor(Color.parseColor(global.buoyList.get(global.markerClickIndex).getRGB1()));
+                        updateBuoy();
+
                         break;
                     }
                     case 2:{
                         // update buoy object and set button's background
                         global.buoyList.get(global.markerClickIndex).setRGB2(hexColor);
                         rgb2.setBackgroundColor(Color.parseColor(global.buoyList.get(global.markerClickIndex).getRGB2()));
+                        updateBuoy();
+
                         break;
                     }
                     case 3:{
                         // update buoy object and set button's background
                         global.buoyList.get(global.markerClickIndex).setRGB3(hexColor);
                         rgb3.setBackgroundColor(Color.parseColor(global.buoyList.get(global.markerClickIndex).getRGB3()));
+                        updateBuoy();
+
                         break;
                     }
                 }
@@ -243,7 +309,6 @@ public class LEDFragment extends Fragment {
         });
         dialog.show();
         //update on server
-        updateBuoy();
     }
 
     private void updateBuoy(){

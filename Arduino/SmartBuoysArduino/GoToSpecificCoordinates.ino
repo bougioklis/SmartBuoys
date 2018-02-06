@@ -6,7 +6,6 @@ void AutoDriveBuoy(){
   }
   else{
     get_direction(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng);
-//    forward();
  } 
 }
 
@@ -41,16 +40,14 @@ Serial.print ("distance is :"); Serial.println (dist_calc);
 
 void get_direction(float lat1, float lon1, float lat2, float lon2){
  int currentAngle = Buoy.orientation; 
- int heading = calc_bearing(lat1,lon1,lat2,lon2);
+ int bearing = calc_bearing(lat1,lon1,lat2,lon2);
 
-//    if((currentAngle - heading < 0 && abs(currentAngle - heading) < 180) || (currentAngle - heading > 0 && abs(currentAngle - heading) > 180))
-    if(currentAngle -heading <0 ){ 
+//TODO na valoume kapoia apoklisi?
+    if(currentAngle -bearing <0 ){ 
       Serial.println("mpikeee sto turn right");
       stopMoving();
       turnRight();
-    }  
-    else if (currentAngle -heading >0)
-    { 
+    }else if (currentAngle -bearing >0){ 
       Serial.println("mpikeee sto turn left");
       stopMoving();
       turnLeft();
@@ -58,9 +55,9 @@ void get_direction(float lat1, float lon1, float lat2, float lon2){
       forward();
     }
     currentAngle = Buoy.orientation;
-    heading = calc_bearing(lat1,lon1,lat2,lon2);
-    Serial.print("Heading : ");Serial.print(heading);Serial.print(" , Current angle : ");Serial.print(currentAngle);
-    Serial.print(" Angle difference:"); Serial.println(abs(currentAngle-heading));
+    bearing = calc_bearing(lat1,lon1,lat2,lon2);
+    Serial.print("bearing : ");Serial.print(bearing);Serial.print(" , Current angle : ");Serial.print(currentAngle);
+    Serial.print(" Angle difference:"); Serial.println(abs(currentAngle-bearing));
 
 }
 
@@ -95,7 +92,6 @@ void stopMoving(){
 void forward(){
 
    delay(100);
-   Serial.println("FORWARD ??????");
    digitalWrite( MOTOR_B_DIR, LOW );
    digitalWrite( MOTOR_B_PWM, LOW );
 
@@ -109,13 +105,11 @@ void turnRight(){
 
     servoMotor.write(135);
     forward();
-//    delay(10000);
 
 }
 
 void turnLeft(){
     servoMotor.write(45);
     forward();
-//    delay(10000);
 }
 
