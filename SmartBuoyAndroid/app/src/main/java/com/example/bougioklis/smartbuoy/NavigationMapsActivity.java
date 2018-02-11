@@ -3,6 +3,7 @@ package com.example.bougioklis.smartbuoy;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,7 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,27 @@ public class NavigationMapsActivity extends AppCompatActivity {
         Drawable marker = buoy.getSelectedMarker();
         items.get(items.size() - 1).setMarker(marker);
 
+        for (int i =0 ;i<global.buoyList.size();i++){
+            if (i == global.markerClickIndex)
+                continue;
+            else{
+                items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
+                 marker = global.buoyList.get(i).getMarkerIcon();
+                items.get(items.size() - 1).setMarker(marker);
+            }
+        }
+
+        Polygon mPolygon = new Polygon(this);
+        mPolygon.setFillColor(Color.argb(75, 13,4,100));
+
+        final double radius = 2000;
+        ArrayList<GeoPoint> circlePoints = new ArrayList<>();
+        for (float f = 0; f < 360; f += 1){
+            circlePoints.add(new GeoPoint(global.latitude , global.longitude ).destinationPoint(radius, f));
+        }
+        mPolygon.setPoints(circlePoints);
+        map.getOverlays().add(mPolygon);
+
         IMapController mapController = map.getController();
         mapController.setZoom(13);
 
@@ -97,27 +120,42 @@ public class NavigationMapsActivity extends AppCompatActivity {
             public boolean singleTapConfirmedHelper( final  GeoPoint p) {
                 Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NavigationMapsActivity.this);
-                alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.alertDialog) + " "+p.getLatitude()+" , "+p.getLongitude());
-                        alertDialogBuilder.setPositiveButton("Ναί",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        global.buoyList.get(global.markerClickIndex).setTargetLat(p.getLatitude());
-                                        global.buoyList.get(global.markerClickIndex).setTargetLng(p.getLongitude());
-                                        updateBuoy();
-                                    }
-                                });
+                if(distance(buoy.getLat(),p.getLatitude(),buoy.getLng(),p.getLongitude()) > 2000){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NavigationMapsActivity.this);
+                    alertDialogBuilder.setMessage("Η Συγκεκριμένες συντεταγμένες είναι εκτός εύρους");
+                    alertDialogBuilder.setPositiveButton("Άκυρο!!!",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    arg0.dismiss();
+                                }
+                            });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NavigationMapsActivity.this);
+                    alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.alertDialog) + " " + p.getLatitude() + " , " + p.getLongitude() +
+                            "\n Η σημαδούρα θα χρειαστεί να ταξιδέψει : " + (int) distance(buoy.getLat(), p.getLatitude(), buoy.getLng(), p.getLongitude()) + " μέτρα.");
+                    alertDialogBuilder.setPositiveButton("Ναί",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    global.buoyList.get(global.markerClickIndex).setTargetLat(p.getLatitude());
+                                    global.buoyList.get(global.markerClickIndex).setTargetLng(p.getLongitude());
+                                    updateBuoy();
+                                }
+                            });
 
-                alertDialogBuilder.setNegativeButton("Άκυρο",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                    alertDialogBuilder.setNegativeButton("Άκυρο", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
                 return false;
             }
 
@@ -167,5 +205,23 @@ public class NavigationMapsActivity extends AppCompatActivity {
         }).start();
     }
 
+    public static double distance(double lat1, double lat2, double lon1,
+                                  double lon2) {
+
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+
+        distance = Math.pow(distance, 2) ;
+
+        return Math.sqrt(distance);
+    }
 
 }
