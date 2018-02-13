@@ -40,10 +40,9 @@ public class MapsActivity extends AppCompatActivity {
     private List<OverlayItem> items = new ArrayList<>();
     private Global global;
 
-    private Timer timer;
     private TimerTask timerTask;
 
-    MapView map;
+    private MapView map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +128,7 @@ public class MapsActivity extends AppCompatActivity {
         GeoPoint startPoint = new GeoPoint(global.latitude, global.longitude);
         mapController.setCenter(startPoint);
 
-        timer = new Timer();
+        Timer timer = new Timer();
 
         //initialize the TimerTask's job
         initializeTimerTask();

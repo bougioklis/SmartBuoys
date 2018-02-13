@@ -16,14 +16,13 @@ import com.example.bougioklis.smartbuoy.SplashActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    EditText ip,cameraIp;
-    Button submit;
+    private EditText ip,cameraIp;
 
-    Global global;
+    private Global global;
 
-    String intentHelper = null;
+    private String intentHelper = null;
 
-    public static  String sharedPreferenceID = "IP_Camera";
+    public static final String sharedPreferenceID = "IP_Camera";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
             intentHelper = intent.getExtras().getString("id");
         }
 
-        submit = (Button) findViewById(R.id.submit);
+        Button submit = (Button) findViewById(R.id.submit);
         ip = (EditText) findViewById(R.id.ip);
         cameraIp = (EditText) findViewById(R.id.rtsp);
 

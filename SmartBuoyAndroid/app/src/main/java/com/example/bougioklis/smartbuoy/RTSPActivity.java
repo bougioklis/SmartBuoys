@@ -1,21 +1,12 @@
 package com.example.bougioklis.smartbuoy;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -29,7 +20,6 @@ import android.widget.Toast;
 
 import com.example.bougioklis.smartbuoy.Classes.BuoyClass;
 import com.example.bougioklis.smartbuoy.Classes.Global;
-import com.example.bougioklis.smartbuoy.Fragments.FragmentDialog;
 import com.example.bougioklis.smartbuoy.MqttHelper.MqttHelper;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -45,34 +35,29 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 public class RTSPActivity extends AppCompatActivity {
 
-    Global global;
-    BuoyClass buoy;
-    Switch cameraSwitch;
-    SeekBar throttle,steering;
-    TextView throttleTV,steeringTV;
-    Button stopButton;
+    private Global global;
+    private BuoyClass buoy;
+    private SeekBar throttle,steering;
+    private TextView throttleTV,steeringTV;
 
     // h lista mas 8a exei stis prwtes 8eseis tis simadoures kai sthn teleutaia marker me thn topo8esia tou user
     private List<OverlayItem> items = new ArrayList<>();
 
-    final static String USERNAME = "admin";
-    final static String PASSWORD = "camera";
-    final static String RTSP_URL = "rtsp://10.0.1.7:554/play1.sdp";
-    final static String RTSP_URL_TEST = "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov";
+//    final static String USERNAME = "admin";
+//    final static String PASSWORD = "camera";
+//    final static String RTSP_URL = "rtsp://10.0.1.7:554/play1.sdp";
+    private final static String RTSP_URL_TEST = "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov";
 
-    MqttHelper mqttHelper;
+    private MqttHelper mqttHelper;
 
     private MediaPlayer mediaPlayer;
     private SurfaceHolder surfaceHolder;
-    SurfaceView surfaceView;
+    private SurfaceView surfaceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +81,7 @@ public class RTSPActivity extends AppCompatActivity {
         throttleTV = (TextView) findViewById(R.id.throttleTextView);
         steering = (SeekBar) findViewById(R.id.steering);
         steeringTV = (TextView) findViewById(R.id.steeringTextView);
-        stopButton = (Button) findViewById(R.id.stop);
+        Button stopButton = (Button) findViewById(R.id.stop);
 
         final int[] progressThrottle = new int[1];
         final int[] progressSterring = new int[1];
@@ -247,7 +232,7 @@ public class RTSPActivity extends AppCompatActivity {
             showRtspStream();
         }
 
-        cameraSwitch = (Switch) findViewById(R.id.cameraSwitch);
+        Switch cameraSwitch = (Switch) findViewById(R.id.cameraSwitch);
 
         cameraSwitch.setChecked(buoy.isCameraflag());
 
@@ -294,7 +279,7 @@ public class RTSPActivity extends AppCompatActivity {
 //        });
     }
 
-    public void showRtspStream(){
+    private void showRtspStream(){
         //rtsp stream
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -319,6 +304,7 @@ public class RTSPActivity extends AppCompatActivity {
                     });
                     mediaPlayer.prepareAsync();
                 } catch (Exception e) {
+                    Log.i("General Exception", e.toString());
                 }
             }
 
@@ -346,19 +332,19 @@ public class RTSPActivity extends AppCompatActivity {
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
     }
 
-    private Map<String, String> getRtspHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        String basicAuthValue = getBasicAuthValue(USERNAME, PASSWORD);
-        headers.put("Authorization", basicAuthValue);
-        return headers;
-    }
+//    private Map<String, String> getRtspHeaders() {
+//        Map<String, String> headers = new HashMap<>();
+//        String basicAuthValue = getBasicAuthValue(USERNAME, PASSWORD);
+//        headers.put("Authorization", basicAuthValue);
+//        return headers;
+//    }
 
-    private String getBasicAuthValue(String usr, String pwd) {
-        String credentials = usr + ":" + pwd;
-        int flags = Base64.URL_SAFE | Base64.NO_WRAP;
-        byte[] bytes = credentials.getBytes();
-        return "Basic " + Base64.encodeToString(bytes, flags);
-    }
+//    private String getBasicAuthValue(String usr, String pwd) {
+//        String credentials = usr + ":" + pwd;
+//        int flags = Base64.URL_SAFE | Base64.NO_WRAP;
+//        byte[] bytes = credentials.getBytes();
+//        return "Basic " + Base64.encodeToString(bytes, flags);
+//    }
 
     private void updateBuoy() {
 

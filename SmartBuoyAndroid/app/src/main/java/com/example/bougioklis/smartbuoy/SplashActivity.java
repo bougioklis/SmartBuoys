@@ -24,10 +24,6 @@ import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.MenuOptions.SettingsActivity;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,19 +31,17 @@ import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private ProgressBar progressBar;
-    private GPS gps;
     private Global global;
-    String server_ip = null;
+    private String server_ip = null;
 
-    public static String sharedPreferenceID = "IP_Camera";
+    private static final String sharedPreferenceID = "IP_Camera";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.setVisibility(View.VISIBLE);
 
         /*
@@ -65,18 +59,18 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(sharedPreferenceID, MODE_PRIVATE);
         server_ip = prefs.getString("IP", null);
 
-        Log.i("serverIP IF",(server_ip==null) +"");
+        Log.i("serverIP IF", (server_ip == null) + "");
 
-        if( !isNetworkAvailable()){
-            Toast.makeText(getApplicationContext(),"Παρακαλώ συνδεθείται στο δίκτυο!",Toast.LENGTH_LONG).show();
+        if (!isNetworkAvailable()) {
+            Toast.makeText(getApplicationContext(), "Παρακαλώ συνδεθείται στο δίκτυο!", Toast.LENGTH_LONG).show();
             finish();
         }
 
-        if (server_ip!= null) {
-        //if ip is saved on shared preference initialize the url vars
+        if (server_ip != null) {
+            //if ip is saved on shared preference initialize the url vars
             global.selectAllURL = "http://" + server_ip + "/WebServer/SelectAllBuoys.php";
             global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
-            global.navigationUrl = "http://"+server_ip+"/WebServer/NavigationBuoy.php";
+            global.navigationUrl = "http://" + server_ip + "/WebServer/NavigationBuoy.php";
             global.MQTTURL = "tcp://" + server_ip + ":1883";
 //            if(!checkIfDeviceIsConnectedToCorrectNetwork(server_ip)){
 //                // intent on Settings Activity to change the ip
@@ -87,26 +81,26 @@ public class SplashActivity extends AppCompatActivity {
 //            }
         } else {
             // intent on Settings Activity to change the ip
-            Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
+            Intent intent = new Intent(SplashActivity.this, SettingsActivity.class);
             //unique id to know from which activity we went on settings activity
-            intent.putExtra("id","SplashActivity");
+            intent.putExtra("id", "SplashActivity");
             startActivity(intent);
         }
 
 
-        gps = new GPS(getApplicationContext());
+        GPS gps = new GPS(getApplicationContext());
         if (!gps.isGPSEnabled) {
             buildAlertMessageNoGPS();
         }
 
-        if(server_ip!=null){
+        if (server_ip != null) {
             //if we have saved ip on shared preferences  download from DB
             downloadFromServer();
         }
 
     }
 
-    void downloadFromServer(){
+    private void downloadFromServer() {
         //background thread
         new Thread(new Runnable() {
             @Override
@@ -132,7 +126,7 @@ public class SplashActivity extends AppCompatActivity {
         }).start();
     }
 
-    void continueApplication() {
+    private void continueApplication() {
 
         //an h suskeuh einai neoteri apo marhmallow
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -240,7 +234,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     // den exoume GPS kai termatizoume thn efarmogh h pame me intent sthn epilogh gia energopoihsh tou gps
-    void buildAlertMessageNoGPS() {
+    private void buildAlertMessageNoGPS() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Το GPS της συσκευής σας είναι απενεργοποιημένο. \rΠαρακαλώ ενεργοποιήστε το.")
                 .setCancelable(false)

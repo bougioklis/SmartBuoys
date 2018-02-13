@@ -12,21 +12,21 @@ import com.example.bougioklis.smartbuoy.R;
 public class BuoyClass {
 
     //The unique Id of each Buoy and the orientation from the compass
-    int id,orientation;
+    private int id,orientation;
     //lat,lng of the Buoy, targetLat,TargetLng oi the coordinates that the buoy has to go to
-    double lat,lng,targetLat,targetLng;
+    private double lat,lng,targetLat,targetLng;
 
     // true or false
-    boolean led1,led2,led3,hoverflag,cameraflag;
+    private boolean led1,led2,led3,hoverflag,cameraflag;
 
     //rgbs on hex  if a rgb is equal to off then it is off.
     // orientationString = "βορειοδυτικα ktlp"
     //topic ID  is  "Buoy+ID"  for the MQTT protocol  and driveTopicID "Buoy+ID+Drive"
-    String RGB1,RGB2,RGB3,orientationString,topicID,driveTopicID;
+    private String RGB1,RGB2,RGB3,orientationString,topicID,driveTopicID;
 
-    Drawable markerIcon,selectedMarker;
+    private Drawable markerIcon,selectedMarker;
     //default throttle and steering
-    int throttle=0,steering=90;
+    private int throttle=0,steering=90;
 
     public BuoyClass(int id, int orientation, double lat, double lng, double targetLat, double targetLng,
                      boolean led1, boolean led2, boolean led3, boolean hoverflag, boolean cameraflag, String RGB1,
@@ -53,7 +53,7 @@ public class BuoyClass {
     }
 
     //function to calc based on ori the buoy's markericon and the orientationString
-    public void calculateIcon(int orientation, Context ct){
+    private void calculateIcon(int orientation, Context ct){
 
         if((orientation>=0 && orientation<=22) || (orientation>=338 && orientation<=360)){
             //north

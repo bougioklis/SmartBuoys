@@ -1,6 +1,7 @@
 Arduino:
 * EEPROM(Last thing to change)
-
+* Servo συνδεσμολογία  (μεγάλες αποκλίσεις)
+* απόκλιση στο navigate
 
 Webserver:
 *Crontab to run subscribeMQTT.php and subscribeMqttUpdateOriLatLng.php

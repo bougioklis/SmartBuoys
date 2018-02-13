@@ -5,8 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.bougioklis.smartbuoy.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -218,10 +216,7 @@ public class Global extends Application {
 
 
     private boolean stringToBoolean(String word) {
-        if (word.equals("0")) {
-            return false;
-        }
-        return true;
+        return !word.equals("0");
     }
 
 

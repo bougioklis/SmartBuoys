@@ -1,10 +1,12 @@
 void AutoDriveBuoy(){
-  
+//calculate the distance between to set of coordinates
+//if it is less than 10Meters then stop  
   if(calc_distance(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng) < 10){
     stopMoving();
     isAutoDriving=false;
   }
   else{
+    //else get directions 
     get_direction(Buoy.latitude, Buoy.longitude, Buoy.TargetLat, Buoy.TargetLng);
  } 
 }
@@ -39,17 +41,19 @@ Serial.print ("distance is :"); Serial.println (dist_calc);
 }
 
 void get_direction(float lat1, float lon1, float lat2, float lon2){
+  //current anfle is the buoy orientation
  int currentAngle = Buoy.orientation; 
+ // bearing is the difference in degrees clockwise between the place we want to go and the current orientation
  int bearing = calc_bearing(lat1,lon1,lat2,lon2);
 
-//TODO na valoume kapoia apoklisi?
+//TODO na valoume kapoia apoklisi? 
     if(currentAngle -bearing <0 ){ 
       Serial.println("mpikeee sto turn right");
-      stopMoving();
+//      stopMoving();
       turnRight();
     }else if (currentAngle -bearing >0){ 
       Serial.println("mpikeee sto turn left");
-      stopMoving();
+//      stopMoving();
       turnLeft();
     }else{
       forward();
@@ -61,6 +65,7 @@ void get_direction(float lat1, float lon1, float lat2, float lon2){
 
 }
 
+//function to calculate bearing in degrees
 int calc_bearing(float flat1, float flon1, float flat2, float flon2)
 {
   float a;
@@ -91,9 +96,9 @@ void stopMoving(){
 
 void forward(){
 
-   delay(100);
-   digitalWrite( MOTOR_B_DIR, LOW );
-   digitalWrite( MOTOR_B_PWM, LOW );
+//   delay(100);
+//   digitalWrite( MOTOR_B_DIR, LOW );
+//   digitalWrite( MOTOR_B_PWM, LOW );
 
    // set the motor speed and direction
    digitalWrite( MOTOR_B_DIR, HIGH ); // direction = forward

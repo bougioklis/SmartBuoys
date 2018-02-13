@@ -1,4 +1,8 @@
-
+/*
+ * function to calculate the orientation from the hmc9110L
+ * 
+ * 
+ */
 void getHeading(){
  /* Get a new sensor event */ 
   sensors_event_t event; 
@@ -27,6 +31,5 @@ void getHeading(){
   float headingDegrees = heading * 180/M_PI; 
   
   Buoy.orientation= headingDegrees;
-//  Serial.print("heading  ");Serial.println(headingDegrees);
   delay(500);
 }

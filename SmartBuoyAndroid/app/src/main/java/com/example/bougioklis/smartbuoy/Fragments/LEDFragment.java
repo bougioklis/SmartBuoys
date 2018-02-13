@@ -27,13 +27,14 @@ import yuku.ambilwarna.AmbilWarnaDialog;
  */
 public class LEDFragment extends Fragment {
 
-    Global global;
-    //xml views
-    Switch led1, led2, led3,rgb1Switch,rgb2Switch,rgb3Switch;
-    Button rgb1, rgb2, rgb3;
+    private  Global global;
+    private Switch rgb1Switch;
+    private Switch rgb2Switch;
+    private Switch rgb3Switch;
+    private Button rgb1, rgb2, rgb3;
 
     // which buoy was selected
-    BuoyClass buoy;
+    private BuoyClass buoy;
 
     public LEDFragment() {
         // Required empty public constructor
@@ -56,9 +57,9 @@ public class LEDFragment extends Fragment {
         buoy = global.buoyList.get(global.markerClickIndex);
 
         //views
-        led1 = (Switch) view.findViewById(R.id.led1);
-        led2 = (Switch) view.findViewById(R.id.led2);
-        led3 = (Switch) view.findViewById(R.id.led3);
+        Switch led1 = (Switch) view.findViewById(R.id.led1);
+        Switch led2 = (Switch) view.findViewById(R.id.led2);
+        Switch led3 = (Switch) view.findViewById(R.id.led3);
 
         rgb1 = (Button) view.findViewById(R.id.rgb1);
         rgb2 = (Button) view.findViewById(R.id.rgb2);
@@ -74,7 +75,7 @@ public class LEDFragment extends Fragment {
         led3.setChecked(buoy.isLed3());
 
 
-        //click listeners for the leds switched and update the DB
+        //click listeners for the led switched and update the DB
         led1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,7 +268,7 @@ public class LEDFragment extends Fragment {
 
 
     }
-    public  void showColorDialog(final int id){
+    private void showColorDialog(final int id){
         final AmbilWarnaDialog dialog = new AmbilWarnaDialog(global.activity, 0xff0000ff, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             // Executes, when user click Cancel button
             @Override
@@ -322,12 +323,12 @@ public class LEDFragment extends Fragment {
                    //update on DB
                     result[0] = global.updateBuoys(global.buoyList.get(global.markerClickIndex));
                 } catch (Exception e) {
-                    Log.i("Thread Exce", e.toString());
+                    Log.i("Thread Exception", e.toString());
                 } finally {
                     global.activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // afou ektelestei to download pigainoume edw
+                            // after download execution we are here
                             if (global.flagIOException) {
                                 //IOException
                                 Toast.makeText(global.context, R.string.unableToUpdate, Toast.LENGTH_LONG).show();

@@ -8,9 +8,6 @@ import android.util.Log;
 
 import com.example.bougioklis.smartbuoy.Classes.Global;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,8 +19,7 @@ import java.util.TimerTask;
 
 public class DownloadService extends Service {
 
-    Global global;
-    private Timer timer;
+    private Global global;
     private TimerTask timerTask;
 
     public DownloadService() {
@@ -58,9 +54,9 @@ public class DownloadService extends Service {
         return START_REDELIVER_INTENT;
     }
 
-    public void startTimer() {
+    private void startTimer() {
         //set a new Timer
-        timer = new Timer();
+        Timer timer = new Timer();
 
         //initialize the TimerTask's job
         initializeTimerTask();
@@ -70,7 +66,7 @@ public class DownloadService extends Service {
         timer.schedule(timerTask, 30000, 30000);
     }
 
-    public void initializeTimerTask() {
+    private void initializeTimerTask() {
         timerTask = new TimerTask() {
             public void run() {
 
@@ -84,8 +80,6 @@ public class DownloadService extends Service {
                             global.buoyList=global.downloadBuoysFromService();
                         } catch (Exception e) {
                             Log.i("Thread ex", e.toString());
-                        } finally {
-
                         }
                     }
                 }).start();

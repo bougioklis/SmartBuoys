@@ -1,39 +1,23 @@
 package com.example.bougioklis.smartbuoy.Fragments;
 
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Toast;
-
-import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.R;
-import com.example.bougioklis.smartbuoy.RTSPActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentDialog extends DialogFragment {
-
-    private Global global;
-
-    private SectionsPagerAdapter sectionsPagerAdapter;
-    private ViewPager viewPager;
 
     public FragmentDialog() {
         // Required empty public constructor
@@ -43,7 +27,6 @@ public class FragmentDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState)
     {
-        global = ((Global) getActivity().getApplicationContext());
         //dialog box initialization
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -61,9 +44,9 @@ public class FragmentDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_fragment_dialog, container);
 
         // tab slider
-        sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         // Set up the ViewPager with the sections adapter.
-        viewPager = (ViewPager)view.findViewById(R.id.pager);
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
         viewPager.setOffscreenPageLimit(0);
         viewPager.setAdapter(sectionsPagerAdapter);
 

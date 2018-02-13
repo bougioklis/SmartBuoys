@@ -1,7 +1,6 @@
 package com.example.bougioklis.smartbuoy.MqttHelper;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.example.bougioklis.smartbuoy.Classes.Global;
@@ -26,20 +25,20 @@ import java.io.UnsupportedEncodingException;
 // class for mqtt subscribe, unsubscribe and publish
 public class MqttHelper {
 
-    public MqttAndroidClient mqttAndroidClient;
-    Global global;
+    private MqttAndroidClient mqttAndroidClient;
+    private Global global;
 
     //mqtt client and server
-    String server,client;
+    private String server;
 
     public MqttHelper(Context context){
 
         global = ((Global) context);
 
         server = global.MQTTURL;
-        client = context.getString(R.string.mqttClientID);
+        String client = context.getString(R.string.mqttClientID);
 
-        mqttAndroidClient = new MqttAndroidClient( context,server,client);
+        mqttAndroidClient = new MqttAndroidClient( context,server, client);
 
         mqttAndroidClient.setCallback(new MqttCallbackExtended() {
             @Override
@@ -119,10 +118,9 @@ public class MqttHelper {
     //publish  message
     public void publishMessage(String topic,String publishMessage){
 
-        String payload = publishMessage;
         byte[] encodedPayload ;
         try {
-            encodedPayload = payload.getBytes("UTF-8");
+            encodedPayload = publishMessage.getBytes("UTF-8");
             MqttMessage message = new MqttMessage(encodedPayload);
             mqttAndroidClient.publish(topic, message);
         } catch (UnsupportedEncodingException | MqttException e) {

@@ -2,21 +2,16 @@ package com.example.bougioklis.smartbuoy;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.example.bougioklis.smartbuoy.Classes.BuoyClass;
 import com.example.bougioklis.smartbuoy.Classes.Global;
-import com.example.bougioklis.smartbuoy.Fragments.FragmentDialog;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -38,9 +33,7 @@ public class NavigationMapsActivity extends AppCompatActivity {
     private List<OverlayItem> items = new ArrayList<>();
     private Global global;
 
-    MapView map;
-
-    BuoyClass buoy;
+    private BuoyClass buoy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +48,7 @@ public class NavigationMapsActivity extends AppCompatActivity {
 
         buoy = global.buoyList.get(global.markerClickIndex);
 
-        map = (MapView) findViewById(R.id.map);
+        MapView map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -66,9 +59,8 @@ public class NavigationMapsActivity extends AppCompatActivity {
         items.get(items.size() - 1).setMarker(marker);
 
         for (int i =0 ;i<global.buoyList.size();i++){
-            if (i == global.markerClickIndex)
-                continue;
-            else{
+            if (i != global.markerClickIndex) {
+
                 items.add(new OverlayItem("", "", new GeoPoint(global.buoyList.get(i).getLat(), global.buoyList.get(i).getLng())));
                  marker = global.buoyList.get(i).getMarkerIcon();
                 items.get(items.size() - 1).setMarker(marker);
@@ -205,7 +197,7 @@ public class NavigationMapsActivity extends AppCompatActivity {
         }).start();
     }
 
-    public static double distance(double lat1, double lat2, double lon1,
+    private static double distance(double lat1, double lat2, double lon1,
                                   double lon2) {
 
         final int R = 6371; // Radius of the earth

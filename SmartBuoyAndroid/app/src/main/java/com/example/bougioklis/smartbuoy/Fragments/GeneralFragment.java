@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,20 +20,15 @@ import com.example.bougioklis.smartbuoy.R;
  */
 public class GeneralFragment extends Fragment{
 
-    //XML views
-    TextView location, orientation,buoyID;
-    Switch hover;
-
 
     //which buoy has been selected
-    BuoyClass buoy;
+    private BuoyClass buoy;
 
-    Global global;
+    private Global global;
+
     public GeneralFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,11 +46,11 @@ public class GeneralFragment extends Fragment{
         buoy = global.buoyList.get(global.markerClickIndex);
 
         // XML views
-        location = (TextView) view.findViewById(R.id.location);
-        orientation  = (TextView) view.findViewById(R.id.orientation);
-        buoyID = (TextView) view.findViewById(R.id.buoyID);
+        TextView location = (TextView) view.findViewById(R.id.location);
+        TextView orientation = (TextView) view.findViewById(R.id.orientation);
+        TextView buoyID = (TextView) view.findViewById(R.id.buoyID);
 
-        hover = (Switch) view.findViewById(R.id.hoverSwitch);
+        Switch hover = (Switch) view.findViewById(R.id.hoverSwitch);
 
 
 
@@ -90,7 +84,7 @@ public class GeneralFragment extends Fragment{
                     //update on server
                    result[0] = global.updateBuoys(global.buoyList.get(global.markerClickIndex));
                 } catch (Exception e) {
-                    Log.i("Thread Exce", e.toString());
+                    Log.i("Thread Exception", e.toString());
                 } finally {
                     global.activity.runOnUiThread(new Runnable() {
                         @Override

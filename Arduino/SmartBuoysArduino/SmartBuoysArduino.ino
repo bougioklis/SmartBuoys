@@ -14,7 +14,7 @@ Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
 #define HG7881_B_IA 5 // D5 --> Motor B Input A --> MOTOR B +
 #define HG7881_B_IB 6 // D6 --> Motor B Input B --> MOTOR B -
 
-// functional connections
+// functional connections for propeller
 #define MOTOR_B_PWM HG7881_B_IA // Motor B PWM Speed
 #define MOTOR_B_DIR HG7881_B_IB // Motor B Direction
 
@@ -60,7 +60,7 @@ struct BuoyStruck{
 
   const char *generalTopic = "Buoy2";
   const char *drivingTopic="Buoy2Drive";
-  int throttle=0,steering=0;
+  int throttle=0,steering=90;
   
 } BuoyStruck;
 
@@ -70,9 +70,10 @@ struct BuoyStruck Buoy;
 boolean IsfirstLoop =true;
 boolean finishedParsing=false;
 boolean isAutoDriving =false;
+int previousThrottle=0;
 
 unsigned long previousMillis = 0; // last time latitude,longtitude and orientation was send to server
-//long interval = 10000; // send LatLng and orientation to server every 10seconds
+long interval = 10000; // send LatLng and orientation to server every 10seconds
 
 
 void setup() {
@@ -107,17 +108,15 @@ void setup() {
   // run while client is not Connected to MQTT SERVER
   while (!client.connected()) {
     // MQTT Client connection
-    if (client.connect(clientMQTT) && client.connect(clientMqttDrive)) {
- 
-//      Serial.println("Connected successfully");
-    } else {
+    if (!client.connect(clientMQTT) || !client.connect(clientMqttDrive)) {
       //error code and retrying to connect
       Serial.print("failed with state ");
       Serial.print(client.state());
       delay(2000);
     }
+  
   }
-
+  
   //Client subscribe to necessary topics
   client.subscribe(Buoy.drivingTopic);
   delay(1000);
@@ -139,11 +138,7 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
-  if(client.loop()){
-//    Serial.println("Client Connected Success");
-    
+  if(client.loop()){    
     //if client is connected to mqtt reset the watchdog Timer
     wdt_reset();
   }else{
@@ -155,19 +150,24 @@ void loop() {
   //current timestamp
   unsigned long currentMillis = millis();
 
-  if(currentMillis - previousMillis > 10000/*interval*/) {
+  //update our database
+  if(currentMillis - previousMillis > interval/*interval*/) {
     previousMillis = currentMillis;  
     updateServerLatLngOrientation();
   }
-  
+
+  // is firts loop ask from server about Buoy's information
   if(IsfirstLoop){
     mqttPublish();
     IsfirstLoop= false;
   }
+  
   Serial.print("servo is on: "); Serial.println(servoMotor.read());
+  
   manageLEDS();
   getHeading();
 
+  //if Buoy is not navigating to specific coordinates then we can set manually specific throttle and steering
   if(!isAutoDriving){
       driveBuoy();
   }
