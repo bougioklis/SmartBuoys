@@ -34,6 +34,12 @@ if($result){
 				echo "Database Created Successfully";
 			}
 		}
+	} 
+	$sql2 = "CREATE TABLE IF NOT EXISTS Coor(ID int(11) AUTO_INCREMENT PRIMARY KEY, buoy_id int(11),latitudeFrom DECIMAL(10,8),longitudeFrom DECIMAL(10,8) , latitudeTo DECIMAL(10,8), longitudeTo DECIMAL(10,8), FOREIGN KEY (buoy_id) REFERENCES Buoy(ID) ON DELETE CASCADE)";
+	$result2= mysqli_query($connection , $sql2);
+	if($result2){
+		$sql3 = "INSERT INTO Coor (buoy_id, latitudeFrom,longitudeFrom,latitudeTo,longitudeTo) VALUES (1,0,0,0,0) , (2,0,0,0,0) , (3,0,0,0,0)";
+		$result3 = mysqli_query($connection,$sql3);
 	}
 }
 ?>
