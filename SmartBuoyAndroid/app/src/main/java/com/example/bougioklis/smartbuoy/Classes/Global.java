@@ -31,7 +31,7 @@ import java.util.List;
 public class Global extends Application {
 
     //ip variables
-    public String selectAllURL, updateURL, MQTTURL,navigationUrl;
+    public String selectAllURL, updateURL, MQTTURL,navigationUrl,avoidCollisionUrl;
 
     //user location
     public double latitude, longitude;

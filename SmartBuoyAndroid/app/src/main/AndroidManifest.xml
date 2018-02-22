@@ -41,6 +41,10 @@
             android:name=".Service.DownloadService"
             android:enabled="true"
             android:stopWithTask="true" />
+        <service
+            android:name=".Service.AvoidCollision"
+            android:enabled="true"
+            android:stopWithTask="false" />
 
         <activity android:name=".NavigationMapsActivity"></activity>
     </application>

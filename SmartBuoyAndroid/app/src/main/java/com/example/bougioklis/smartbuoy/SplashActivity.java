@@ -72,6 +72,7 @@ public class SplashActivity extends AppCompatActivity {
             global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
             global.navigationUrl = "http://" + server_ip + "/WebServer/NavigationBuoy.php";
             global.MQTTURL = "tcp://" + server_ip + ":1883";
+            global.avoidCollisionUrl = "http://" + server_ip + "WebServer/avoidCollision.php";
 //            if(!checkIfDeviceIsConnectedToCorrectNetwork(server_ip)){
 //                // intent on Settings Activity to change the ip
 //                Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
