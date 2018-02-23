@@ -4,7 +4,8 @@ Arduino:
 * απόκλιση στο navigate
 
 Webserver:
-*Crontab to run subscribeMQTT.php and subscribeMqttUpdateOriLatLng.php
+* Crontab to run subscribeMQTT.php and subscribeMqttUpdateOriLatLng.php
+* Trigger not working correctly. (does not update Buoy Table)
 
 
 
