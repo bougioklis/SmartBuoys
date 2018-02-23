@@ -1,13 +1,22 @@
 package com.example.bougioklis.smartbuoy.Service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.bougioklis.smartbuoy.Classes.BuoyClass;
 import com.example.bougioklis.smartbuoy.Classes.Global;
+import com.example.bougioklis.smartbuoy.R;
+import com.example.bougioklis.smartbuoy.SplashActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +39,7 @@ public class AvoidCollision extends Service {
 
     Global global;
     private TimerTask timerTask;
+    private int counter =0;
 
     public AvoidCollision() {
         super();
@@ -72,7 +82,7 @@ public class AvoidCollision extends Service {
 
         //schedule the timer, to wake up every 30 seconds
         // every 30 secs checks
-        timer.schedule(timerTask, 30000, 30000);
+        timer.schedule(timerTask, 16000, 16000);
     }
 
     private void initializeTimerTask() {
@@ -86,21 +96,46 @@ public class AvoidCollision extends Service {
                             result[0] = checkCollision();
                         } catch (Exception e) {
                             Log.i("Thread ex", e.toString());
-                        }finally {
-                            if(!result[0].isEmpty()){
+                        } finally {
+                            if (!result[0].equals("-1")) {
 
                                 String parts[] = result[0].split("###");
-                                String finalMessage="" ;
+                                String finalMessage = "";
 
-                                for( int i =0 ;i < parts.length;i++){
-                                    BuoyClass buoyOne = global.buoyList.get(Integer.parseInt(parts[i].substring(0,parts[i].indexOf(",")))-1);
-                                    BuoyClass buoyTwo = global.buoyList.get(Integer.parseInt(parts[i].substring(parts[i].indexOf(",")))-1);
+                                for (int i = 0; i < parts.length; i++) {
+                                    BuoyClass buoyOne = global.buoyList.get(Integer.parseInt(parts[i].substring(0, parts[i].indexOf(","))) - 1);
+                                    BuoyClass buoyTwo = global.buoyList.get(Integer.parseInt(parts[i].substring(parts[i].indexOf(",") + 1)) - 1);
 
-                                    finalMessage +="two Buoys are dangerously close\n" +" Buoy 1 :" + buoyOne.getId() +"  Buoy2 : "+buoyTwo.getId();
+                                    finalMessage += "Buoy1: " + buoyOne.getId() + " , " + " Buoy2 : " + buoyTwo.getId() + "\n";
+
 
                                 }
 
                                 System.out.println(finalMessage);
+
+
+//                                Notification.Builder builder = new Notification.Builder(
+//                                        getApplicationContext());
+//
+//                                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+//                                intent.setAction("notification");
+//                                PendingIntent pendingIntent = PendingIntent.getActivity(
+//                                        getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+
+                                //---------------------------------------
+
+
+                                if (counter == 0) {
+                                    notificationOperations(finalMessage);
+                                    counter++;
+                                }else{
+                                    notificationOperations(finalMessage);
+                                }
+
+
+
+                                //---------------------------------------
 
                             }
                         }
@@ -138,5 +173,35 @@ public class AvoidCollision extends Service {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    private void notificationOperations(String message){
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        Notification.Builder builder = new Notification.Builder(
+                getApplicationContext());
+
+        Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+        intent.setAction("notification");
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        builder.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Alert")
+                .setContentText("Οι παρακάτω σημαδούρες είναι επικίνδυνα κοντά!!" + message)
+                .setTicker("Alert")
+                .setLights(Color.RED, 3000, 3000)
+                // setLights (int argb, int onMs, int offMs)
+                .setContentIntent(pendingIntent)
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                .setAutoCancel(true);
+
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        builder.setSound(uri);
+
+        Notification notification = builder.getNotification();
+        notificationManager.notify(001, notification);
     }
 }

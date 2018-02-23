@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.example.bougioklis.smartbuoy.Classes.GPS;
 import com.example.bougioklis.smartbuoy.Classes.Global;
 import com.example.bougioklis.smartbuoy.MenuOptions.SettingsActivity;
+import com.example.bougioklis.smartbuoy.Service.AvoidCollision;
+import com.example.bougioklis.smartbuoy.Service.DownloadService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,14 +74,10 @@ public class SplashActivity extends AppCompatActivity {
             global.updateURL = "http://" + server_ip + "/WebServer/UpdateBuoys.php";
             global.navigationUrl = "http://" + server_ip + "/WebServer/NavigationBuoy.php";
             global.MQTTURL = "tcp://" + server_ip + ":1883";
-            global.avoidCollisionUrl = "http://" + server_ip + "WebServer/avoidCollision.php";
-//            if(!checkIfDeviceIsConnectedToCorrectNetwork(server_ip)){
-//                // intent on Settings Activity to change the ip
-//                Intent intent = new Intent(SplashActivity.this,SettingsActivity.class);
-//                //unique id to know from which activity we went on settings activity
-//                intent.putExtra("id","SplashActivity");
-//                startActivity(intent);
-//            }
+            global.avoidCollisionUrl = "http://" + server_ip + "/WebServer/avoidCollision.php";
+
+            Intent serviceIntent = new Intent(this, AvoidCollision.class);
+            startService(serviceIntent);
         } else {
             // intent on Settings Activity to change the ip
             Intent intent = new Intent(SplashActivity.this, SettingsActivity.class);
